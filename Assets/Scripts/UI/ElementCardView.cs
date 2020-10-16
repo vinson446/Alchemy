@@ -6,6 +6,9 @@ using TMPro;
 
 public class ElementCardView : MonoBehaviour
 {
+    [SerializeField] string _name;
+    public string Name { get => _name; set => _name = value; }
+
     [SerializeField] TextMeshProUGUI _nameTextUI;
     [SerializeField] TextMeshProUGUI _levelTextUI;
     [SerializeField] TextMeshProUGUI _attackText;
@@ -20,6 +23,8 @@ public class ElementCardView : MonoBehaviour
 
     public void Display(ElementCard card)
     {
+        Name = card.Name;
+
         _nameTextUI.text = card.Name;
         _levelTextUI.text = card.Level.ToString();
         _attackText.text = card.Attack.ToString();

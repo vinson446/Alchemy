@@ -232,9 +232,10 @@ GameObject:
   - component: {fileID: 7409477648936164379}
   - component: {fileID: 7409477648936164380}
   - component: {fileID: 5028476373321716372}
+  - component: {fileID: 4790554852750884443}
   m_Layer: 5
   m_Name: Monster Card
-  m_TagString: Untagged
+  m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -294,6 +295,19 @@ MonoBehaviour:
   _targetTransform: {fileID: 0}
   cardFront: {fileID: 7409477649673529507}
   cardBack: {fileID: 2123738165785640068}
+--- !u!65 &4790554852750884443
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7409477648936164378}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 300, y: 400, z: 20}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7409477648964071434
 GameObject:
   m_ObjectHideFlags: 0

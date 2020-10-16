@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 enum BattleState { Draw, PlayerTurn, Battle };
 
@@ -31,10 +32,15 @@ public class BattleManager : MonoBehaviour
     Deck<Card> _discard = new Deck<Card>();
     Deck<Card> _playerHand = new Deck<Card>();
 
+    int setUpDeckIndex = 0;
+    int selectedCardIndex = -1;
+
     private void Start()
     {
         SetupElementDeck();
         SetupSpellDeck();
+
+        SetupPlayerHand();
 
         ShuffleDeck();
     }
@@ -45,26 +51,6 @@ public class BattleManager : MonoBehaviour
         {
             StartCoroutine(Draw());
         }
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.tag == "Card")
-                {
-                    // front end
-                    GameObject cardObj = hit.transform.gameObject;
-                    int index = int.Parse(cardObj.transform.parent.name);
-
-                    _playerHandList.RemoveAt(index);
-                    
-
-                    // backend
-                    _playerHand.Remove(index);
-                }
-            }
-        }
     }
 
     public void ChangeBattleState(int index)
@@ -72,31 +58,45 @@ public class BattleManager : MonoBehaviour
         _battleState = (BattleState)index;
     }
 
+    void SetupPlayerHand()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            ElementCard card = new ElementCard(_elementDeckConfig[0]);
+            _playerHand.Add(card, DeckPosition.Top);
+        }
+    }
+
     void ShuffleDeck()
     {
         // frontend
         // TODO- cool shuffle animation
-        MoveCardsInDiscardToDeck();
+        StartCoroutine(MoveCardsInDiscardToDeck());
 
-        _deck.Shuffle();
+        // backend
+        _deck.Shuffle(_deckList);
     }
 
-    void MoveCardsInDiscardToDeck()
+    IEnumerator MoveCardsInDiscardToDeck()
     {
-        if (!_discard.IsEmpty)
+        int count = _discard.Count;
+        for (int i = 0; i < count; i++)
         {
-            for (int i = 0; i < _discard.Count; i++)
+            // frontend- move card objs in discard list to deck list 
+            CardMovement cardMovement = _discardList[0].GetComponent<CardMovement>();
+            cardMovement.transform.parent = _deckPosition;
+            if (cardMovement != null)
             {
-                // frontend- move any card objs in discard list position to deck list position
-                CardMovement cardMovement = _discardList[i].GetComponent<CardMovement>();
-                if (cardMovement != null)
-                {
-                    cardMovement.TargetTransform = _deckPosition;
-                }
-
-                // backend- remove card from discard 
-                _discard.Remove(i);
+                cardMovement.TargetTransform = _deckPosition;
             }
+            _deckList.Add(_discardList[0]);
+            _discardList.Remove(_discardList[0]);
+
+            // backend- add cards in discard to deck
+            _deck.Add(_discard.GetCard(0));
+            _discard.Remove(0);
+
+            yield return new WaitForSeconds(0.2f);
         }
     }
 
@@ -104,13 +104,17 @@ public class BattleManager : MonoBehaviour
     {
         foreach (ElementCardData elementData in _elementDeckConfig)
         {
-            // frontend- create element card obj at deck position
-            GameObject newElementCardObj = Instantiate(_elementCard, _deckPosition.position, Quaternion.Euler(new Vector3(0, -180, 0)));
-            newElementCardObj.transform.parent = _deckPosition;
-            _deckList.Add(newElementCardObj);
-
-            // backend- create element card and add to deck list
             ElementCard newElementCard = new ElementCard(elementData);
+
+            // frontend- update card stats on each card visually
+            ElementCardView newElementCardView = _deckList[setUpDeckIndex].GetComponent<ElementCardView>();
+            if (newElementCardView != null)
+            {
+                newElementCardView.Display(newElementCard);
+            }
+            setUpDeckIndex += 1;
+
+            // backend- add element card to deck list
             _deck.Add(newElementCard);
         }
     }
@@ -119,13 +123,17 @@ public class BattleManager : MonoBehaviour
     {
         foreach (SpellCardData spellData in _spellDeckConfig)
         {
-            // frontend- create spell card obj at deck position
-            GameObject newSpellCardObj = Instantiate(_spellCard, _deckPosition.position, Quaternion.Euler(new Vector3(0, -180, 0)));
-            newSpellCardObj.transform.parent = _deckPosition;
-            _deckList.Add(newSpellCardObj);
-
-            // backend- create spell card and add to deck list
             SpellCard newSpellCard = new SpellCard(spellData);
+
+            // frontend- update card stats on card visually;
+            SpellCardView newSpellCardView = _deckList[setUpDeckIndex].GetComponent<SpellCardView>();
+            if (newSpellCardView != null)
+            {
+                newSpellCardView.Display(newSpellCard);
+            }
+            setUpDeckIndex += 1;
+
+            // backend- add spell card to decklist
             _deck.Add(newSpellCard);
         }
     }
@@ -134,38 +142,67 @@ public class BattleManager : MonoBehaviour
     {
         ChangeBattleState(0);
 
-        if (!_deck.IsEmpty)
-        { 
-            for (int j = 0; j < _playerHandPositions.Length; j++)
-            {
-                if (_playerHandPositions[j].transform.childCount == 0)
-                {
-                    // frontend
-                    GameObject cardDrawn = _deckList[_deck.LastIndex];
-                    _playerHandList.Add(cardDrawn);
-
-                    cardDrawn.transform.parent = _playerHandPositions[j].transform;
-
-                    CardMovement cardMovement = cardDrawn.GetComponent<CardMovement>();
-                    if (cardMovement != null)
-                    {
-                        cardMovement.TargetTransform = _playerHandPositions[j].transform;
-                    }
-
-                    _deckList.Remove(cardDrawn);
-
-                    yield return new WaitForSeconds(0.2f);
-
-                    // backend
-                    Card newCard = _deck.Draw(DeckPosition.Top);
-                    _playerHand.Add(newCard, DeckPosition.Top);
-                }
-            }          
-        }
-        // reshuffle deck
-        else
+        if (_deck.IsEmpty)
         {
             ShuffleDeck();
+
+            yield break;
         }
+
+        for (int j = 0; j < _playerHandPositions.Length; j++)
+        {
+            if (!_deck.IsEmpty && _playerHandPositions[j].transform.childCount == 0)
+            {
+                // frontend- get top card of deck, child it to a hand position, then move the card to the hand position
+                GameObject cardDrawn = _deckList[_deck.LastIndex];
+                _playerHandList[j] = cardDrawn;
+
+                cardDrawn.transform.parent = _playerHandPositions[j].transform;
+
+                CardMovement cardMovement = cardDrawn.GetComponent<CardMovement>();
+                if (cardMovement != null)
+                {
+                    cardMovement.TargetTransform = _playerHandPositions[j].transform;
+                }
+
+                _deckList.Remove(cardDrawn);
+
+                yield return new WaitForSeconds(0.2f);
+
+                // backend
+                Card newCard = _deck.Draw(DeckPosition.Top);
+                _playerHand.LazyAdd(newCard, j);
+            }
+        }             
+    }
+
+    // SelectManager calls this function based on card slot picked
+    public void SelectCard(int index)
+    {
+        selectedCardIndex = index;
+
+        RemoveCard();
+    }
+
+    public void RemoveCard()
+    {
+        // front end- remove selected card
+        GameObject selectedCard = _playerHandList[selectedCardIndex];
+        selectedCard.transform.parent = _discardPosition;
+
+        CardMovement cardMovement = selectedCard.GetComponent<CardMovement>();
+        if (cardMovement != null)
+        {
+            cardMovement.TargetTransform = _discardPosition;
+        }
+
+        _playerHandList[selectedCardIndex] = null;
+        _discardList.Add(selectedCard);
+        Debug.Log(_discardList[_discardList.Count - 1].GetComponent<ElementCardView>().Name);
+
+        // back end- remove selected cards
+        Card card = _playerHand.GetCard(selectedCardIndex);
+        _discard.Add(card, DeckPosition.Top);
+        _playerHand.LazyRemove(selectedCardIndex);
     }
 }

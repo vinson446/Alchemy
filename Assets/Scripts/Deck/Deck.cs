@@ -93,6 +93,19 @@ public class Deck<T> where T : Card
         }
     }
 
+    public void LazyAdd(T card, int index)
+    {
+        // bodyguard
+        if (card == null)
+        {
+            return;
+        }
+
+        _cards[index] = card;
+
+        CardAdded?.Invoke(card);
+    }
+
     public T Draw(DeckPosition position = DeckPosition.Top)
     {
         if (IsEmpty)
@@ -134,6 +147,30 @@ public class Deck<T> where T : Card
         }
     }
 
+    public void LazyRemove(int index)
+    {
+        if (IsEmpty)
+        {
+            Debug.LogWarning("Deck: Nothing to remove; deck is already empty");
+            return;
+        }
+        else if (!IsIndexWithinListRange(index))
+        {
+            Debug.LogWarning("Deck Nothing to remove; index out of range");
+            return;
+        }
+
+        T removedItem = _cards[index];
+        _cards[index] = null;
+
+        CardRemoved?.Invoke(removedItem);
+
+        if (_cards.Count == 0)
+        {
+            Emptied?.Invoke();
+        }
+    }
+
     // validate if the index is within the list size
     bool IsIndexWithinListRange(int index)
     {
@@ -159,7 +196,7 @@ public class Deck<T> where T : Card
         }
     }
 
-    public void Shuffle()
+    public void Shuffle(List<GameObject> frontEndList)
     {
         // start at top, randomly swapping cards as we move our way down
         for (int currentIndex = Count - 1; currentIndex > 0; --currentIndex)
@@ -167,10 +204,14 @@ public class Deck<T> where T : Card
             // choose random card, but not one we have already picked
             int randomIndex = UnityEngine.Random.Range(0, currentIndex + 1);
             T randomCard = _cards[randomIndex];
+            GameObject randomCardObj = frontEndList[randomIndex];
 
             // random card swaps places with our current index
             _cards[randomIndex] = _cards[currentIndex];
             _cards[currentIndex] = randomCard;
+
+            frontEndList[randomIndex] = frontEndList[currentIndex];
+            frontEndList[currentIndex] = randomCardObj;
 
             // move downwards to next card index
         }

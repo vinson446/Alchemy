@@ -22,7 +22,7 @@ public class ElementCard : Card
 
         PlayEffect = Data.PlayEffect;
     }
-
+    
     public override void Play()
     {
         ITargetable target = TargetController.CurrentTarget;
