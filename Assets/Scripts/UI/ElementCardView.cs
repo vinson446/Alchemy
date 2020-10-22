@@ -18,9 +18,6 @@ public class ElementCardView : MonoBehaviour
     [SerializeField] Image _elementSpriteBackground;
     [SerializeField] Image _elementCardBackground;
 
-    int attack;
-    int defense;
-
     public void Display(ElementCard card)
     {
         Name = card.Name;

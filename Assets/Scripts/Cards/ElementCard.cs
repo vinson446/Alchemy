@@ -25,9 +25,11 @@ public class ElementCard : Card
     
     public override void Play()
     {
+        /*
         ITargetable target = TargetController.CurrentTarget;
 
         Debug.Log("Playing " + Name + " on target.");
         PlayEffect.Activate(target);
+        */
     }
 }

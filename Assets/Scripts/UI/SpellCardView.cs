@@ -6,6 +6,9 @@ using TMPro;
 
 public class SpellCardView : MonoBehaviour
 {
+    [SerializeField] string _name;
+    public string Name { get => _name; set => _name = value; }
+
     [SerializeField] TextMeshProUGUI _nameTextUI;
     [SerializeField] TextMeshProUGUI _levelTextUI;
     [SerializeField] TextMeshProUGUI _attackText;
@@ -17,6 +20,8 @@ public class SpellCardView : MonoBehaviour
 
     public void Display(SpellCard spellCard)
     {
+        Name = spellCard.Name;
+
         _nameTextUI.text = spellCard.Name;
         _levelTextUI.text = spellCard.Level.ToString();
         _attackText.text = spellCard.AttackBuff.ToString();

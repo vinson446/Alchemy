@@ -10,6 +10,10 @@ public class BattleManager : MonoBehaviour
     [Header("Battle State")]
     [SerializeField] BattleState _battleState;
 
+    [Header("Prefabs")]
+    [SerializeField] GameObject _elementCard;
+    [SerializeField] GameObject _spellCard;
+
     [Header("Frontend- Lists")]
     [SerializeField] List<GameObject> _deckList;
     [SerializeField] List<GameObject> _discardList;
@@ -20,13 +24,10 @@ public class BattleManager : MonoBehaviour
     [SerializeField] Transform[] _playerHandPositions;
     [SerializeField] Transform _discardPosition;
 
-    [Header("Backend")]
+    // backend
+    [Header("Backend- Config")]
     [SerializeField] List<ElementCardData> _elementDeckConfig = new List<ElementCardData>();
     [SerializeField] List<SpellCardData> _spellDeckConfig = new List<SpellCardData>();
-
-    [Header("Prefabs")]
-    [SerializeField] GameObject _elementCard;
-    [SerializeField] GameObject _spellCard;
 
     Deck<Card> _deck = new Deck<Card>();
     Deck<Card> _discard = new Deck<Card>();
@@ -39,7 +40,6 @@ public class BattleManager : MonoBehaviour
     {
         SetupElementDeck();
         SetupSpellDeck();
-
         SetupPlayerHand();
 
         ShuffleDeck();
@@ -69,11 +69,11 @@ public class BattleManager : MonoBehaviour
 
     void ShuffleDeck()
     {
-        // frontend
+        // front end
         // TODO- cool shuffle animation
         StartCoroutine(MoveCardsInDiscardToDeck());
 
-        // backend
+        // back end
         _deck.Shuffle(_deckList);
     }
 
@@ -82,7 +82,7 @@ public class BattleManager : MonoBehaviour
         int count = _discard.Count;
         for (int i = 0; i < count; i++)
         {
-            // frontend- move card objs in discard list to deck list 
+            // front end- move card objs in discard list to deck list 
             CardMovement cardMovement = _discardList[0].GetComponent<CardMovement>();
             cardMovement.transform.parent = _deckPosition;
             if (cardMovement != null)
@@ -92,7 +92,7 @@ public class BattleManager : MonoBehaviour
             _deckList.Add(_discardList[0]);
             _discardList.Remove(_discardList[0]);
 
-            // backend- add cards in discard to deck
+            // back end- add cards in discard to deck
             _deck.Add(_discard.GetCard(0));
             _discard.Remove(0);
 
@@ -106,15 +106,17 @@ public class BattleManager : MonoBehaviour
         {
             ElementCard newElementCard = new ElementCard(elementData);
 
-            // frontend- update card stats on each card visually
+            // front end- update card stats on each card visually
             ElementCardView newElementCardView = _deckList[setUpDeckIndex].GetComponent<ElementCardView>();
             if (newElementCardView != null)
             {
                 newElementCardView.Display(newElementCard);
+                newElementCardView.gameObject.name = newElementCardView.Name;
             }
             setUpDeckIndex += 1;
 
-            // backend- add element card to deck list
+
+            // back end- add element card to deck list
             _deck.Add(newElementCard);
         }
     }
@@ -125,15 +127,16 @@ public class BattleManager : MonoBehaviour
         {
             SpellCard newSpellCard = new SpellCard(spellData);
 
-            // frontend- update card stats on card visually;
+            // front end- update card stats on card visually;
             SpellCardView newSpellCardView = _deckList[setUpDeckIndex].GetComponent<SpellCardView>();
             if (newSpellCardView != null)
             {
                 newSpellCardView.Display(newSpellCard);
+                newSpellCardView.gameObject.name = newSpellCardView.Name;
             }
             setUpDeckIndex += 1;
 
-            // backend- add spell card to decklist
+            // back end- add spell card to decklist
             _deck.Add(newSpellCard);
         }
     }
@@ -153,7 +156,7 @@ public class BattleManager : MonoBehaviour
         {
             if (!_deck.IsEmpty && _playerHandPositions[j].transform.childCount == 0)
             {
-                // frontend- get top card of deck, child it to a hand position, then move the card to the hand position
+                // front end- get top card of deck, child it to a hand position, then move the card to the hand position
                 GameObject cardDrawn = _deckList[_deck.LastIndex];
                 _playerHandList[j] = cardDrawn;
 
@@ -169,7 +172,7 @@ public class BattleManager : MonoBehaviour
 
                 yield return new WaitForSeconds(0.2f);
 
-                // backend
+                // back end
                 Card newCard = _deck.Draw(DeckPosition.Top);
                 _playerHand.LazyAdd(newCard, j);
             }
@@ -198,9 +201,8 @@ public class BattleManager : MonoBehaviour
 
         _playerHandList[selectedCardIndex] = null;
         _discardList.Add(selectedCard);
-        Debug.Log(_discardList[_discardList.Count - 1].GetComponent<ElementCardView>().Name);
 
-        // back end- remove selected cards
+        // back end- remove selected card
         Card card = _playerHand.GetCard(selectedCardIndex);
         _discard.Add(card, DeckPosition.Top);
         _playerHand.LazyRemove(selectedCardIndex);

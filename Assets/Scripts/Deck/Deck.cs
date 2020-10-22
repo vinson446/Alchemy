@@ -93,6 +93,7 @@ public class Deck<T> where T : Card
         }
     }
 
+    // assigns card to list index (for player hand)
     public void LazyAdd(T card, int index)
     {
         // bodyguard
@@ -147,6 +148,7 @@ public class Deck<T> where T : Card
         }
     }
 
+    // assigns list index to null (for player hand)
     public void LazyRemove(int index)
     {
         if (IsEmpty)

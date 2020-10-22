@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CardType { Element, Spell };
+// TODO? public enum CardType { Element, Spell };
 
 public abstract class Card 
 {
-    public CardType cardType { get; protected set; }
+    // TODO? public CardType cardType { get; protected set; }
 
     public string Name { get; protected set; } = "...";
     public int Level { get; protected set; } = 1;

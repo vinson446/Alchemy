@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum GameStates { Menu, LevelSelect, Battle};
-
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameStates _gameState;
     public static GameManager instance;
 
     private void Awake()
