@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class SetupCardGameState : CardGameState
+public class SetupBattleState : BattleState
 {
     [SerializeField] int _startingCardNumber = 30;
     [SerializeField] int _numberOfPlayers = 2;
@@ -17,6 +18,8 @@ public class SetupCardGameState : CardGameState
         // DONT put ChangeState<> here
 
         _activated = false;
+
+        StateMachine.Input.PressedGoToMenu += OnPressedMenu;
     }
 
     public override void Tick()
@@ -24,7 +27,7 @@ public class SetupCardGameState : CardGameState
         if (_activated == false)
         {
             _activated = true;
-            StateMachine.ChangeState<PlayerTurnCardGameState>();
+            StateMachine.ChangeState<PlayerTurnBattleState>();
         }
     }
 
@@ -32,5 +35,10 @@ public class SetupCardGameState : CardGameState
     {
         Debug.Log("Setup: Exiting");
         _activated = false;
+    }
+
+    public void OnPressedMenu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }

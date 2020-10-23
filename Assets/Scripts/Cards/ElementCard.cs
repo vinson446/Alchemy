@@ -32,4 +32,20 @@ public class ElementCard : Card
         PlayEffect.Activate(target);
         */
     }
+
+    public void UpgradeCard()
+    {
+        Attack *= 2;
+        Defense *= 2;
+
+        Level++;
+    }
+
+    public void RevertUpgrade()
+    {
+        Attack /= 2;
+        Defense /= 2;
+
+        Level--;
+    }
 }

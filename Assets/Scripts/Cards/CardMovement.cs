@@ -44,6 +44,7 @@ public class CardMovement : MonoBehaviour
         }
     }
 
+    // move and rotate towards end position and rotation
     private void SmoothToPointAndDirection(Vector3 point, float moveSmooth, Quaternion rotation, float rotSmooth)
     {
         transform.position = Vector3.SmoothDamp(transform.position, point, ref _smoothVelocity, moveSmooth);
@@ -56,6 +57,7 @@ public class CardMovement : MonoBehaviour
         transform.rotation = newRotation;
     }
 
+    // shows front/back of card based on its angle with the camera
     private void TestVisibility()
     {
         float angle = Vector3.Angle(Camera.main.transform.forward, transform.forward);

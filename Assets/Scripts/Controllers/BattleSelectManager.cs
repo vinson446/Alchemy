@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class SelectManager : MonoBehaviour
+public class BattleSelectManager : MonoBehaviour
 {
     BattleManager battleManager;
 
@@ -35,7 +35,7 @@ public class SelectManager : MonoBehaviour
 
             foreach (RaycastResult result in results)
             {
-                PlayerHandSlot slot = result.gameObject.GetComponentInParent<PlayerHandSlot>();
+                Slot slot = result.gameObject.GetComponentInParent<Slot>();
                 if (slot != null)
                 {
                     int index = int.Parse(slot.name);

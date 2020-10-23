@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardGameSM : StateMachine
+public class LevelSelectSM : StateMachine
 {
     [SerializeField] InputController _input;
     public InputController Input => _input;
@@ -10,6 +10,6 @@ public class CardGameSM : StateMachine
     // Start is called before the first frame update
     void Start()
     {
-        ChangeState<SetupCardGameState>();
+        ChangeState<ShowLevelSelectState>();
     }
 }

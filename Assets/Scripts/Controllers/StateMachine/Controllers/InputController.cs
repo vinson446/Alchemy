@@ -5,50 +5,75 @@ using System;
 
 public class InputController : MonoBehaviour
 {
+    // general input
+    public event Action PressedGoToMenu = delegate { };
+    public event Action PressedGoToLevelSelect = delegate { };
+    public event Action PressedGoToBattle = delegate { };
+
     public event Action PressedConfirm = delegate { };
-    public event Action PressedCancel = delegate { };
-    public event Action PressedLeft = delegate { };
+
+    // level select input
+    // public event Action PressedViewLab = delegate { };
+    public event Action PressedViewDeck = delegate { };
+    public event Action PressedViewUpgrade = delegate { };
     public event Action PressedRight = delegate { };
+    public event Action PressedLeft = delegate { };
+
+    // battle input
+
 
     private void Update()
     {
-        DetectConfirm();
-        DetectCancel();
-        DetectRight();
-        DetectLeft();
+
     }
 
-    private void DetectConfirm()
+    // general input
+    public void DetectMenu()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PressedConfirm?.Invoke();
-        }
+        PressedGoToMenu?.Invoke();
     }
 
-    private void DetectCancel()
+    public void DetectLevelSelect()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            PressedCancel?.Invoke();
-        }
+        PressedGoToLevelSelect?.Invoke();
     }
 
-    void DetectRight()
+    public void DetectBattle()
     {
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            PressedRight?.Invoke();
-        }
+        PressedGoToBattle?.Invoke();
     }
 
-    void DetectLeft()
+    // level select- quit
+    /*
+    public void DetectViewLab()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            PressedLeft?.Invoke();
-        }
+        PressedViewLab?.Invoke();
+    }
+    */
+
+    public void DetectViewDeck()
+    {
+        PressedViewDeck?.Invoke();
     }
 
+    public void DetectViewUpgrade()
+    {
+        PressedViewUpgrade?.Invoke();
+    }
 
+    public void DetectRight()
+    {
+        PressedRight?.Invoke();
+    }
+
+    public void DetectLeft()
+    {
+        PressedLeft?.Invoke();
+    }
+
+    // battle input
+    public void DetectConfirm()
+    {
+        PressedConfirm?.Invoke();
+    }
 }

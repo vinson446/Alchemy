@@ -3,16 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-enum BattleState { Draw, PlayerTurn, Battle };
-
 public class BattleManager : MonoBehaviour
 {
-    [Header("Battle State")]
-    [SerializeField] BattleState _battleState;
-
     [Header("Prefabs")]
     [SerializeField] GameObject _elementCard;
-    [SerializeField] GameObject _spellCard;
+    // [SerializeField] GameObject _spellCard;
 
     [Header("Frontend- Lists")]
     [SerializeField] List<GameObject> _deckList;
@@ -25,21 +20,22 @@ public class BattleManager : MonoBehaviour
     [SerializeField] Transform _discardPosition;
 
     // backend
-    [Header("Backend- Config")]
-    [SerializeField] List<ElementCardData> _elementDeckConfig = new List<ElementCardData>();
-    [SerializeField] List<SpellCardData> _spellDeckConfig = new List<SpellCardData>();
-
-    Deck<Card> _deck = new Deck<Card>();
+    Deck<Card> _battleDeck = new Deck<Card>();
     Deck<Card> _discard = new Deck<Card>();
     Deck<Card> _playerHand = new Deck<Card>();
 
-    int setUpDeckIndex = 0;
-    int selectedCardIndex = -1;
+    int _setUpDeckIndex = 0;
+    int _selectedCardIndex = -1;
+
+    GameManager _gameManager;
 
     private void Start()
     {
-        SetupElementDeck();
-        SetupSpellDeck();
+        _gameManager = FindObjectOfType<GameManager>();
+
+        SetupBattleDeck();
+        ShowAllCardsInDeck();
+
         SetupPlayerHand();
 
         ShuffleDeck();
@@ -53,16 +49,32 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void ChangeBattleState(int index)
+    // assemble battle deck with game manager's deck to use in battle
+    void SetupBattleDeck()
     {
-        _battleState = (BattleState)index;
+        for (int i = 0; i < _gameManager.Deck.Count; i++)
+        {
+            _battleDeck.Add(_gameManager.Deck.GetCard(i));
+        }
     }
 
+    // display cards visually in battle deck
+    void ShowAllCardsInDeck()
+    {
+        for (int i = 0; i < _deckList.Count; i++)
+        {
+            ElementCardView c = _deckList[i].GetComponent<ElementCardView>();
+            ElementCard newCard = (ElementCard)_battleDeck.GetCard(i);
+            c.Display(newCard);
+        }
+    }
+
+    // set up player hand deck for back end use
     void SetupPlayerHand()
     {
         for (int i = 0; i < 5; i++)
         {
-            ElementCard card = new ElementCard(_elementDeckConfig[0]);
+            ElementCard card = new ElementCard(_gameManager.DeckConfig[0]);
             _playerHand.Add(card, DeckPosition.Top);
         }
     }
@@ -74,7 +86,7 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(MoveCardsInDiscardToDeck());
 
         // back end
-        _deck.Shuffle(_deckList);
+        _battleDeck.Shuffle(_deckList);
     }
 
     IEnumerator MoveCardsInDiscardToDeck()
@@ -82,7 +94,7 @@ public class BattleManager : MonoBehaviour
         int count = _discard.Count;
         for (int i = 0; i < count; i++)
         {
-            // front end- move card objs in discard list to deck list 
+            // front end- add cards in discard to deck
             CardMovement cardMovement = _discardList[0].GetComponent<CardMovement>();
             cardMovement.transform.parent = _deckPosition;
             if (cardMovement != null)
@@ -93,88 +105,45 @@ public class BattleManager : MonoBehaviour
             _discardList.Remove(_discardList[0]);
 
             // back end- add cards in discard to deck
-            _deck.Add(_discard.GetCard(0));
+            _battleDeck.Add(_discard.GetCard(0));
             _discard.Remove(0);
 
             yield return new WaitForSeconds(0.2f);
         }
     }
 
-    private void SetupElementDeck()
-    {
-        foreach (ElementCardData elementData in _elementDeckConfig)
-        {
-            ElementCard newElementCard = new ElementCard(elementData);
-
-            // front end- update card stats on each card visually
-            ElementCardView newElementCardView = _deckList[setUpDeckIndex].GetComponent<ElementCardView>();
-            if (newElementCardView != null)
-            {
-                newElementCardView.Display(newElementCard);
-                newElementCardView.gameObject.name = newElementCardView.Name;
-            }
-            setUpDeckIndex += 1;
-
-
-            // back end- add element card to deck list
-            _deck.Add(newElementCard);
-        }
-    }
-
-    private void SetupSpellDeck()
-    {
-        foreach (SpellCardData spellData in _spellDeckConfig)
-        {
-            SpellCard newSpellCard = new SpellCard(spellData);
-
-            // front end- update card stats on card visually;
-            SpellCardView newSpellCardView = _deckList[setUpDeckIndex].GetComponent<SpellCardView>();
-            if (newSpellCardView != null)
-            {
-                newSpellCardView.Display(newSpellCard);
-                newSpellCardView.gameObject.name = newSpellCardView.Name;
-            }
-            setUpDeckIndex += 1;
-
-            // back end- add spell card to decklist
-            _deck.Add(newSpellCard);
-        }
-    }
-
     IEnumerator Draw()
     {
-        ChangeBattleState(0);
-
-        if (_deck.IsEmpty)
+        if (_battleDeck.IsEmpty)
         {
             ShuffleDeck();
 
             yield break;
         }
 
-        for (int j = 0; j < _playerHandPositions.Length; j++)
+        for (int i = 0; i < _playerHandPositions.Length; i++)
         {
-            if (!_deck.IsEmpty && _playerHandPositions[j].transform.childCount == 0)
+            if (!_battleDeck.IsEmpty && _playerHandPositions[i].transform.childCount == 0)
             {
-                // front end- get top card of deck, child it to a hand position, then move the card to the hand position
-                GameObject cardDrawn = _deckList[_deck.LastIndex];
-                _playerHandList[j] = cardDrawn;
+                // front end- get top card of deck, then move card to an empty hand slot
+                GameObject cardDrawn = _deckList[_battleDeck.LastIndex];
+                _playerHandList[i] = cardDrawn;
 
-                cardDrawn.transform.parent = _playerHandPositions[j].transform;
+                cardDrawn.transform.parent = _playerHandPositions[i].transform;
 
                 CardMovement cardMovement = cardDrawn.GetComponent<CardMovement>();
                 if (cardMovement != null)
                 {
-                    cardMovement.TargetTransform = _playerHandPositions[j].transform;
+                    cardMovement.TargetTransform = _playerHandPositions[i].transform;
                 }
 
                 _deckList.Remove(cardDrawn);
 
                 yield return new WaitForSeconds(0.2f);
 
-                // back end
-                Card newCard = _deck.Draw(DeckPosition.Top);
-                _playerHand.LazyAdd(newCard, j);
+                // back end- draw from battle deck to player hand
+                Card newCard = _battleDeck.Draw(DeckPosition.Top);
+                _playerHand.LazyAdd(newCard, i);
             }
         }             
     }
@@ -182,15 +151,15 @@ public class BattleManager : MonoBehaviour
     // SelectManager calls this function based on card slot picked
     public void SelectCard(int index)
     {
-        selectedCardIndex = index;
+        _selectedCardIndex = index;
 
         RemoveCard();
     }
 
     public void RemoveCard()
     {
-        // front end- remove selected card
-        GameObject selectedCard = _playerHandList[selectedCardIndex];
+        // front end- remove selected card from player hand to discard
+        GameObject selectedCard = _playerHandList[_selectedCardIndex];
         selectedCard.transform.parent = _discardPosition;
 
         CardMovement cardMovement = selectedCard.GetComponent<CardMovement>();
@@ -199,12 +168,12 @@ public class BattleManager : MonoBehaviour
             cardMovement.TargetTransform = _discardPosition;
         }
 
-        _playerHandList[selectedCardIndex] = null;
+        _playerHandList[_selectedCardIndex] = null;
         _discardList.Add(selectedCard);
 
-        // back end- remove selected card
-        Card card = _playerHand.GetCard(selectedCardIndex);
+        // back end- remove selected card from player hand to discard
+        Card card = _playerHand.GetCard(_selectedCardIndex);
         _discard.Add(card, DeckPosition.Top);
-        _playerHand.LazyRemove(selectedCardIndex);
+        _playerHand.LazyRemove(_selectedCardIndex);
     }
 }

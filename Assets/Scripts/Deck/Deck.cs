@@ -198,6 +198,14 @@ public class Deck<T> where T : Card
         }
     }
 
+    public void SetCard(T c, int index)
+    {
+        if (_cards[index] != null)
+        {
+            _cards[index] = c;
+        }
+    }
+
     public void Shuffle(List<GameObject> frontEndList)
     {
         // start at top, randomly swapping cards as we move our way down

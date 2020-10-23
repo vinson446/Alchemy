@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PlayerTurnCardGameState : CardGameState
+public class PlayerTurnBattleState : BattleState
 {
     [SerializeField] TextMeshProUGUI _playerTurnTextUI = null;
     int _playerTurnCount = 0;
@@ -23,11 +23,11 @@ public class PlayerTurnCardGameState : CardGameState
     {
         Debug.Log("Player Turn: Exiting");
 
-        StateMachine.Input.PressedConfirm += OnPressedConfirm;
+        StateMachine.Input.PressedConfirm -= OnPressedConfirm;
     }
 
     void OnPressedConfirm()
     {
-        StateMachine.ChangeState<EnemyTurnCardGameState>();
+        StateMachine.ChangeState<EnemyTurnBattleState>();
     }
 }

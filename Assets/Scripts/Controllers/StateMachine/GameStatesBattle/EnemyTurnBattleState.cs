@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EnemyTurnCardGameState : CardGameState
+public class EnemyTurnBattleState : BattleState
 {
     public static event Action EnemyTurnBegan;
     public static event Action EnemyTurnEnded;
@@ -31,6 +31,6 @@ public class EnemyTurnCardGameState : CardGameState
         Debug.Log("Enemy performs action");
         EnemyTurnEnded?.Invoke();
 
-        StateMachine.ChangeState<PlayerTurnCardGameState>();
+        StateMachine.ChangeState<PlayerTurnBattleState>();
     }
 }
