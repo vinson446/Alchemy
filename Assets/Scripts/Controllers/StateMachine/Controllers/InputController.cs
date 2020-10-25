@@ -10,8 +10,6 @@ public class InputController : MonoBehaviour
     public event Action PressedGoToLevelSelect = delegate { };
     public event Action PressedGoToBattle = delegate { };
 
-    public event Action PressedConfirm = delegate { };
-
     // level select input
     // public event Action PressedViewLab = delegate { };
     public event Action PressedViewDeck = delegate { };
@@ -20,7 +18,7 @@ public class InputController : MonoBehaviour
     public event Action PressedLeft = delegate { };
 
     // battle input
-
+    public event Action PressedConfirm = delegate { };
 
     private void Update()
     {

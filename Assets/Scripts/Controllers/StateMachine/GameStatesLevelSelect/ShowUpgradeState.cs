@@ -88,7 +88,7 @@ public class ShowUpgradeState : LevelSelectState
         _goldText.text = "Gold: " + _gold.ToString();
     }
 
-    public void OnPressedUpgrade()
+    void OnPressedUpgrade()
     {
         if (_gold >= _cost)
         {
@@ -112,7 +112,7 @@ public class ShowUpgradeState : LevelSelectState
         }
     }
 
-    public void OnPressedDeck()
+    void OnPressedDeck()
     {
         StateMachine.ChangeState<ShowDeckState>();
     }

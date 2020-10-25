@@ -7,6 +7,9 @@ public class ElementCard : Card
     public int Attack { get; private set; }
     public int Defense { get; private set; }
 
+    public ElementCardData[] FusionCombinations { get; private set; }
+    public ElementCardData[] FusionMonsters { get; private set; }
+
     public ElementCard(ElementCardData Data)
     {
         // Card variables
@@ -19,6 +22,9 @@ public class ElementCard : Card
         Sprite = Data.Sprite;
         SpriteBackground = Data.SpriteBackground;
         CardBackground = Data.CardBackground;
+
+        FusionCombinations = Data.FusionCombinations;
+        FusionMonsters = Data.FusionMonsters;
 
         PlayEffect = Data.PlayEffect;
     }

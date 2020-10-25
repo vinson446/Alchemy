@@ -62,27 +62,27 @@ public class ShowLevelSelectState : LevelSelectState
         StateMachine.Input.PressedLeft -= LeftArrow;
     }
 
-    public void OnPressedLab()
+    void OnPressedLab()
     {
         StateMachine.ChangeState<ShowLaboratoryState>();
     }
 
-    public void OnPressedDeck()
+    void OnPressedDeck()
     {
         StateMachine.ChangeState<ShowDeckState>();
     }
 
-    public void OnPressedBattle()
+    void OnPressedBattle()
     {
         SceneManager.LoadScene("Battle");
     }
 
-    public void OnPressedMenu()
+    void OnPressedMenu()
     {
         SceneManager.LoadScene("Menu");
     }
 
-    public void RightArrow()
+    void RightArrow()
     {
         if ((_currentStageIndex < _allLevels.Length - 1) && (_currentStageIndex < gameManager.LevelsUnlocked))
         {
@@ -104,7 +104,7 @@ public class ShowLevelSelectState : LevelSelectState
         }
     }
 
-    public void LeftArrow()
+    void LeftArrow()
     {
         if ((_currentStageIndex > 0))
         {

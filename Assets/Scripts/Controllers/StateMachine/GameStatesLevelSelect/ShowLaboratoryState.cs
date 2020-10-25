@@ -33,12 +33,12 @@ public class ShowLaboratoryState : LevelSelectState
         StateMachine.Input.PressedGoToMenu -= OnPressedMenu;
     }
 
-    public void OnPressedLevelSelect()
+    void OnPressedLevelSelect()
     {
         StateMachine.ChangeState<ShowLevelSelectState>();
     }
 
-    public void OnPressedMenu()
+    void OnPressedMenu()
     {
         SceneManager.LoadScene("Menu");
     }

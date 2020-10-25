@@ -32,4 +32,10 @@ public class ElementCardData : ScriptableObject
 
     [SerializeField] CardPlayEffect _playEffect = null;
     public CardPlayEffect PlayEffect => _playEffect;
+
+    [SerializeField] ElementCardData[] _fusionCombinations = null;
+    public ElementCardData[] FusionCombinations => _fusionCombinations;
+
+    [SerializeField] ElementCardData[] _fusionMonsters = null;
+    public ElementCardData[] FusionMonsters => _fusionMonsters;
 }

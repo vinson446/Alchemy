@@ -21,3 +21,11 @@ MonoBehaviour:
   _spriteBackground: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   _cardBackground: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   _playEffect: {fileID: 11400000, guid: f980ee1910259454a8dc6f68586f51c4, type: 2}
+  _fusionCombinations:
+  - {fileID: 11400000, guid: 5606692aab4dca9488da6f9714d1f1f4, type: 2}
+  - {fileID: 11400000, guid: 3a1e523e5ba52164483e6e665f600072, type: 2}
+  - {fileID: 11400000, guid: 37bae8231a8e7564885ed068e4ea3cd2, type: 2}
+  _fusionMonsters:
+  - {fileID: 11400000, guid: c68a35e4cd09b4f4dac82d30e412c86d, type: 2}
+  - {fileID: 11400000, guid: b02fc036e321eb544a43893d1a828517, type: 2}
+  - {fileID: 11400000, guid: 6be4cdb11dfcc3046956d888c84a1887, type: 2}

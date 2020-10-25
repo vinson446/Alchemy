@@ -46,7 +46,7 @@ public class ShowDeckState : LevelSelectState
         StateMachine.Input.PressedViewUpgrade -= OnPressedViewUpgrade;
     }
 
-    public void OnPressedLevelSelect()
+    void OnPressedLevelSelect()
     {
         _deckPanel.SetActive(false);
 
@@ -55,14 +55,14 @@ public class ShowDeckState : LevelSelectState
         StateMachine.ChangeState<ShowLevelSelectState>();
     }
 
-    public void OnPressedViewUpgrade()
+    void OnPressedViewUpgrade()
     {
         EnableDisableDeckPanelButtons(false);
 
         StateMachine.ChangeState<ShowUpgradeState>();
     }
 
-    public void OnPressedMenu()
+    void OnPressedMenu()
     {
         _deckPanel.SetActive(false);
 
