@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bc79037fdf504f40a60e2193b2ed4d9, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: 
-  _name: ...
+  _name: Poison
   _level: 1
   _attack: 0
   _defense: 0

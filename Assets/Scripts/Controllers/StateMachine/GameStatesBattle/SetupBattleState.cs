@@ -48,11 +48,11 @@ public class SetupBattleState : BattleState
     void SetupBattle()
     {
         SetupBattleDeck();
-        ShowAllCardsInDeck();
 
-        SetupPlayerHand();
+        LazySetupPlayerHand();
 
         ShuffleDeck();
+        ShowAllCardsInDeck();
     }
 
     // assemble battle deck with game manager's deck to use in battle
@@ -60,27 +60,13 @@ public class SetupBattleState : BattleState
     {
         for (int i = 0; i < _gameManager.Deck.Count; i++)
         {
-            // front end
-            _battleManager.DeckList[i].name = _gameManager.Deck.GetCard(i).Name;
-
             // back end
             _battleManager.BattleDeck.Add(_gameManager.Deck.GetCard(i));
         }
     }
 
-    // display cards visually in battle deck
-    void ShowAllCardsInDeck()
-    {
-        for (int i = 0; i < _gameManager.Deck.Count; i++)
-        {
-            ElementCardView c = _battleManager.DeckList[i].GetComponent<ElementCardView>();
-            ElementCard newCard = (ElementCard)_battleManager.BattleDeck.GetCard(i);
-            c.Display(newCard);
-        }
-    }
-
     // set up player hand deck for back end use
-    void SetupPlayerHand()
+    void LazySetupPlayerHand()
     {
         for (int i = 0; i < 5; i++)
         {
@@ -93,32 +79,19 @@ public class SetupBattleState : BattleState
     {
         // front end
         // TODO- cool shuffle animation
-        StartCoroutine(MoveCardsInDiscardToDeck());
 
         // back end
         _battleManager.BattleDeck.Shuffle(_battleManager.DeckList);
     }
 
-    IEnumerator MoveCardsInDiscardToDeck()
+    // display cards visually in battle deck
+    void ShowAllCardsInDeck()
     {
-        int count = _battleManager.Discard.Count;
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < _gameManager.Deck.Count; i++)
         {
-            // front end- add cards in discard to deck
-            CardMovement cardMovement = _battleManager.DiscardList[0].GetComponent<CardMovement>();
-            cardMovement.transform.parent = _battleManager.DeckPos;
-            if (cardMovement != null)
-            {
-                cardMovement.TargetTransform = _battleManager.DeckPos;
-            }
-            _battleManager.DeckList.Add(_battleManager.DiscardList[0]);
-            _battleManager.DiscardList.Remove(_battleManager.DiscardList[0]);
-
-            // back end- add cards in discard to deck
-            _battleManager.BattleDeck.Add(_battleManager.Discard.GetCard(0));
-            _battleManager.Discard.Remove(0);
-
-            yield return new WaitForSeconds(0.2f);
+            ElementCardView c = _battleManager.DeckList[i].GetComponent<ElementCardView>();
+            ElementCard newCard = (ElementCard)_battleManager.BattleDeck.GetCard(i);
+            c.Display(newCard);
         }
     }
 }

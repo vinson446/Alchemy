@@ -7,6 +7,7 @@ public class ElementCard : Card
     public int Attack { get; private set; }
     public int Defense { get; private set; }
 
+    // parallel arrays
     public ElementCardData[] FusionCombinations { get; private set; }
     public ElementCardData[] FusionMonsters { get; private set; }
 

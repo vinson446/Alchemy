@@ -24,7 +24,7 @@ MonoBehaviour:
   _fusionCombinations:
   - {fileID: 11400000, guid: b8dd80d0f0d52cf46915683bfc0796db, type: 2}
   - {fileID: 11400000, guid: 107c8b0d2d5453c47ba0bba510d8ef1d, type: 2}
-  - {fileID: 11400000, guid: 912471d22ff8f6d48b680f150cae368e, type: 2}
+  - {fileID: 11400000, guid: fd5072f3c1e994945ab6cda4ebce2253, type: 2}
   _fusionMonsters:
   - {fileID: 11400000, guid: 671b0d7db2a2574479442533fc1f497f, type: 2}
   - {fileID: 11400000, guid: c68a35e4cd09b4f4dac82d30e412c86d, type: 2}
