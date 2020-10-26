@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class BattleManager : MonoBehaviour
 {
     [Header("Prefabs")]
     [SerializeField] GameObject _elementCard;
     // [SerializeField] GameObject _spellCard;
+
+    [Header("Life Points")]
+    [SerializeField] int _playerHP;
+    public int PlayerHP => _playerHP;
+    [SerializeField] int _enemyHP;
+    public int EnemyHP => _enemyHP;
+    [SerializeField] TextMeshProUGUI _playerHPText;
+    [SerializeField] TextMeshProUGUI _enemyHPText;
 
     [Header("Frontend- Lists")]
     [SerializeField] List<GameObject> _deckList;
@@ -44,4 +53,50 @@ public class BattleManager : MonoBehaviour
 
     Deck<Card> _playerHand = new Deck<Card>();
     public Deck<Card> PlayerHand => _playerHand;
+
+    GameManager _gameManager;
+
+    private void Start()
+    {
+        _gameManager = FindObjectOfType<GameManager>();
+
+        SetupEnemyHP();
+        UpdateBothHP(0, 0);    
+    }
+
+    public void SetupEnemyHP()
+    {
+        _enemyHP = _playerHP + _gameManager.LevelsUnlocked * 500;
+        _enemyHPText.text = _enemyHP.ToString();
+    }
+
+    public void UpdateBothHP(int p, int e)
+    {
+        _playerHP -= p;
+        _enemyHP -= e;
+
+        _playerHPText.text = _playerHP.ToString();
+        _enemyHPText.text = _enemyHP.ToString();
+
+        // win battle
+        if (_enemyHP <= 0)
+        {
+            WinBattle();
+        }
+        // lose battle
+        else if (_playerHP <= 0)
+        {
+            LoseBattle();
+        }
+    }
+
+    void WinBattle()
+    {
+
+    }
+
+    void LoseBattle()
+    {
+
+    }
 }

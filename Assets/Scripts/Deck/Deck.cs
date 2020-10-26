@@ -13,8 +13,8 @@ public class Deck<T> where T : Card
     public event Action<T> CardRemoved = delegate { };
 
     public int Count => _cards.Count;
-    public T TopItem => _cards[_cards.Count - 1];
-    public T BottomItem => _cards[0];
+    T TopItem => _cards[_cards.Count - 1];
+    T BottomItem => _cards[0];
     public bool IsEmpty => _cards.Count == 0;
     public int LastIndex
     {

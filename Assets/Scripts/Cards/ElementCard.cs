@@ -55,4 +55,12 @@ public class ElementCard : Card
 
         Level--;
     }
+
+    public void SetFusionMonsterStats(int attack1, int attack2, int defense1, int defense2, int level1, int level2)
+    {
+        Attack = attack1 + attack2;
+        Defense = defense1 + defense2;
+
+        Level = level1 + level2;
+    }
 }

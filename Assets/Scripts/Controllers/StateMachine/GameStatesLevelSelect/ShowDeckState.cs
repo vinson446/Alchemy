@@ -8,6 +8,7 @@ public class ShowDeckState : LevelSelectState
 {
     [SerializeField] GameObject[] _allPanels;
     [SerializeField] GameObject _deckPanel;
+    [SerializeField] ElementCardView[] cards;
 
     GameManager _gameManager;
     DeckSelectManager _deckSelectManager;
@@ -20,7 +21,6 @@ public class ShowDeckState : LevelSelectState
     public override void Enter()
     {
         _deckPanel.SetActive(true);
-        EnableDisableDeckPanelButtons(true);
 
         ShowAllCardStats();
 
@@ -57,8 +57,6 @@ public class ShowDeckState : LevelSelectState
 
     void OnPressedViewUpgrade()
     {
-        EnableDisableDeckPanelButtons(false);
-
         StateMachine.ChangeState<ShowUpgradeState>();
     }
 
@@ -71,26 +69,12 @@ public class ShowDeckState : LevelSelectState
         SceneManager.LoadScene("Menu");
     }
 
-    void EnableDisableDeckPanelButtons(bool b)
-    {
-        Button[] buttonsInDeckPanel = _deckPanel.GetComponentsInChildren<Button>();
-        foreach (Button button in buttonsInDeckPanel)
-        {
-            button.enabled = b;
-        }
-    }
-
     void ShowAllCardStats()
     {
-        int index = 0;
-
-        ElementCardView[] cards = _deckPanel.GetComponentsInChildren<ElementCardView>();
-        foreach (ElementCardView c in cards)
+        for (int i = 0; i < cards.Length; i++)
         {
-            ElementCard newCard = (ElementCard)_gameManager.Deck.GetCard(index);
-            c.Display(newCard);
-
-            index++;
+            ElementCard newCard = (ElementCard)_gameManager.Deck.GetCard(i);
+            cards[i].Display(newCard);
         }
     }
 }

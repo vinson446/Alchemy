@@ -10,6 +10,8 @@ public class SetupBattleState : BattleState
 
     bool _activated = false;
 
+    EnemyTurnBattleState _enemyTurnBattleState;
+
     public override void Enter()
     {
         Debug.Log("Setup: Entering");
@@ -18,6 +20,10 @@ public class SetupBattleState : BattleState
         // CANT change state while still in Enter()/Exit() transition
         // DONT put ChangeState<> here
         _gameManager = FindObjectOfType<GameManager>();
+
+        _enemyTurnBattleState = GetComponent<EnemyTurnBattleState>();
+        _enemyTurnBattleState.CreateEnemyDeck();
+        _enemyTurnBattleState.ShuffleEnemyDeck();
 
         SetupBattle();
 

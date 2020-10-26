@@ -17,9 +17,9 @@ MonoBehaviour:
   _attack: 200
   _defense: 600
   _description: 
-  _sprite: {fileID: 21300000, guid: 63256e736c31cce42b6df17603373835, type: 3}
-  _spriteBackground: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  _cardBackground: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  _sprite: {fileID: 21300000, guid: d032a754d13e0e446a19db58c0186299, type: 3}
+  _spriteBackground: {fileID: 0}
+  _cardBackground: {fileID: 0}
   _playEffect: {fileID: 11400000, guid: f980ee1910259454a8dc6f68586f51c4, type: 2}
   _fusionCombinations:
   - {fileID: 11400000, guid: 5606692aab4dca9488da6f9714d1f1f4, type: 2}

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using TMPro;
 using DG.Tweening;
 
 public class PlayerTurnBattleState : BattleState
@@ -15,25 +14,34 @@ public class PlayerTurnBattleState : BattleState
     PointerEventData _pointerEventData;
     [SerializeField] EventSystem _eventSystem;
 
-    [Header("Selection Settings")]
+    [Header("Animation Settings")]
+    [SerializeField] float _normFactor;
     [SerializeField] float _shrinkFactor;
     [SerializeField] float _growthFactor;
     [SerializeField] float _duration;
 
     [Header("Fusion Card Settings")]
     [SerializeField] ElementCardView _fusionCardView;
+    [SerializeField] GameObject _combatButtonObj;
+    [SerializeField] GameObject _cancelButtonObj1;
     [SerializeField] GameObject _fuseButtonObj;
-    [SerializeField] float _xMovePos;
+    [SerializeField] GameObject _cancelButtonObj2;
     [SerializeField] float _durationMoveOut;
     [SerializeField] float _durationMoveIn;
 
-    public bool _selectingFirstCard = true;
-    public bool _selectingSecondCard = false;
-    public bool _finishedPlayerAction = false;
+    [Header("Battle Settings")]
+    [SerializeField] Transform _playerBattlePos;
+
+    bool _selectingFirstCard = true;
+    bool _selectingSecondCard = false;
+    bool _finishedPlayerAction = false;
     public int _selectedCardIndex1 = -2;
     public int _selectedCardIndex2 = -2;
     int[] _fusionCombinationIndexes = new int[5];
     int _fusionCombinationIndex;
+
+    GameObject _selectedMonster;
+    public GameObject SelectedMonster => _selectedMonster;
 
     public override void Enter()
     {
@@ -44,7 +52,7 @@ public class PlayerTurnBattleState : BattleState
 
     public override void Tick()
     {
-        if (_selectedCardIndex1 == -1 || _selectedCardIndex2 == -1)
+        if (_selectedCardIndex1 < 0 || _selectedCardIndex2 < 0)
             CheckForSelection();
     }
 
@@ -169,17 +177,27 @@ public class PlayerTurnBattleState : BattleState
                     int index = int.Parse(slot.name);
                     SelectCard(index, _selectingFirstCard);
                 }
+                // let combat button be clicked if it has been
+                else if (result.gameObject.GetComponentInParent<Button>() != null)
+                {
+
+                }
                 // if player did not select a card, reset player hand positioning
                 else
                 {
-                    ResetFrontEnd();
-                    ResetBackEnd();
+                    ResetBothEnds();
 
                     break;
                 }
                 break;
             }
         }
+    }
+
+    public void ResetBothEnds()
+    {
+        ResetFrontEnd();
+        ResetBackEnd();
     }
 
     void ResetFrontEnd()
@@ -200,7 +218,7 @@ public class PlayerTurnBattleState : BattleState
                     }
 
                     _battleManager.PlayerShrinkPositions[i].rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-                    _battleManager.PlayerHandList[i].transform.DOScale(1f, 0.2f);
+                    _battleManager.PlayerHandList[i].transform.DOScale(_normFactor, _duration);
 
                     // reset glow
                     GameObject glowImageObj = _battleManager.PlayerHandList[i];
@@ -219,7 +237,7 @@ public class PlayerTurnBattleState : BattleState
                     cardMovement.transform.parent = _battleManager.PlayerHandPositions[i];
 
                     _battleManager.PlayerShrinkPositions[i].rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-                    _battleManager.PlayerHandList[i].transform.DOScale(1f, 0.2f);
+                    _battleManager.PlayerHandList[i].transform.DOScale(_normFactor, _duration);
 
                     // reset glow
                     GameObject glowImageObj = _battleManager.PlayerHandList[i];
@@ -229,8 +247,11 @@ public class PlayerTurnBattleState : BattleState
             }
         }
 
-        // turn off fusion monster button
+        // turn off fusion monster button and cancel button
         _fuseButtonObj.SetActive(false);
+        _cancelButtonObj2.SetActive(false);
+        _combatButtonObj.SetActive(false);
+        _cancelButtonObj1.SetActive(false);
     }
 
     void ResetBackEnd()
@@ -272,6 +293,7 @@ public class PlayerTurnBattleState : BattleState
             _selectingSecondCard = true;
 
             CheckForFusionCombinations();
+            ShowFightButton();
         }
 
         // RemoveCard();
@@ -379,9 +401,18 @@ public class PlayerTurnBattleState : BattleState
         }
     }
 
+    void ShowFightButton()
+    {
+        _combatButtonObj.SetActive(true);
+        _cancelButtonObj1.SetActive(true);
+    }
+
     void ShowFusionCombinationButton()
     {
+        _combatButtonObj.SetActive(false);
+        _cancelButtonObj1.SetActive(false);
         _fuseButtonObj.SetActive(true);
+        _cancelButtonObj2.SetActive(true);
     }
 
     public void StartFusionCoroutine()
@@ -408,12 +439,16 @@ public class PlayerTurnBattleState : BattleState
 
         yield return new WaitForSeconds(_durationMoveOut + _durationMoveIn);
 
-        // show fusion monster
+        // hide selected cards
         _battleManager.PlayerHandList[_selectedCardIndex1].SetActive(false);
         _battleManager.PlayerHandList[_selectedCardIndex2].SetActive(false);
 
+        // show fusion monster
+        ElementCard firstCard = (ElementCard)_battleManager.PlayerHand.GetCard(_selectedCardIndex1);
         ElementCard currentCard = (ElementCard)_battleManager.PlayerHand.GetCard(_selectedCardIndex2);
         ElementCard fusionCard = new ElementCard(currentCard.FusionMonsters[_fusionCombinationIndexes[_selectedCardIndex2]]);
+
+        fusionCard.SetFusionMonsterStats(firstCard.Attack, currentCard.Attack, firstCard.Defense, currentCard.Defense, firstCard.Level, currentCard.Level);
 
         _fusionCardView.Display(fusionCard);
         _fusionCardView.gameObject.SetActive(true);
@@ -421,13 +456,59 @@ public class PlayerTurnBattleState : BattleState
         _battleManager.PlayerPlayingCardPositions[0].transform.position = _battleManager.PlayerPlayingCardPositions[4].transform.position;
         _battleManager.PlayerPlayingCardPositions[1].transform.position = _battleManager.PlayerPlayingCardPositions[5].transform.position;
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
+
+        MoveCardToBattlePos();
 
         // clean up => transition to enemy turn
+        /*
         _fusionCardView.gameObject.SetActive(false);
 
         ResetFrontEnd();
         RemoveSelectedCards();
+        */
+    }
+
+    public void MoveCardToBattlePos()
+    {
+        // send first card to battle
+        if (_selectedCardIndex2 < 0)
+        {
+            CardMovement cardMovement = _battleManager.PlayerHandList[_selectedCardIndex1].GetComponent<CardMovement>();
+            cardMovement.TargetTransform = _playerBattlePos;
+            cardMovement.gameObject.transform.DOScale(_growthFactor, _duration);
+
+            _combatButtonObj.SetActive(false);
+            _cancelButtonObj1.SetActive(false);
+
+            // make other cards disappear
+            for (int i = 0; i < _battleManager.PlayerHandList.Count; i++)
+            {
+                if (i != _selectedCardIndex1)
+                {
+                    _battleManager.PlayerHandList[i].gameObject.SetActive(false);
+                }
+            }
+
+            _selectedMonster = _battleManager.PlayerHandList[_selectedCardIndex1];
+        }
+        // send fusion card to battle
+        else
+        {
+            CardMovement cardMovement = _fusionCardView.GetComponent<CardMovement>();
+            cardMovement.TargetTransform = _playerBattlePos;
+
+            _fuseButtonObj.SetActive(false);
+            _cancelButtonObj2.SetActive(false);
+
+            // make other cards disappear
+            for (int i = 0; i < _battleManager.PlayerHandList.Count; i++)
+            {
+                _battleManager.PlayerHandList[i].gameObject.SetActive(false);
+            }
+
+            _selectedMonster = _fusionCardView.gameObject;
+        }
 
         StartEnemyTurnBattleState();
     }
@@ -439,13 +520,13 @@ public class PlayerTurnBattleState : BattleState
             // front end- remove selected card from player hand to discard
             GameObject selectedCard = _battleManager.PlayerHandList[_selectedCardIndex1];
             selectedCard.transform.parent = _battleManager.DiscardPosition;
-            selectedCard.transform.DOScale(1f, 0f);
+            selectedCard.transform.DOScale(_normFactor, _duration);
             selectedCard.SetActive(true);
 
-            CardMovement cardMovement = selectedCard.GetComponent<CardMovement>();
-            if (cardMovement != null)
+            CardMovement cardMovement1 = selectedCard.GetComponent<CardMovement>();
+            if (cardMovement1 != null)
             {
-                cardMovement.TargetTransform = _battleManager.DiscardPosition;
+                cardMovement1.TargetTransform = _battleManager.DiscardPosition;
             }
 
             _battleManager.PlayerHandList[_selectedCardIndex1] = null;
@@ -462,13 +543,13 @@ public class PlayerTurnBattleState : BattleState
             // front end- remove selected card from player hand to discard
             GameObject selectedCard = _battleManager.PlayerHandList[_selectedCardIndex2];
             selectedCard.transform.parent = _battleManager.DiscardPosition;
-            selectedCard.transform.DOScale(1f, 0f);
+            selectedCard.transform.DOScale(_normFactor, _duration);
             selectedCard.SetActive(true);
 
-            CardMovement cardMovement = selectedCard.GetComponent<CardMovement>();
-            if (cardMovement != null)
+            CardMovement cardMovement2 = selectedCard.GetComponent<CardMovement>();
+            if (cardMovement2 != null)
             {
-                cardMovement.TargetTransform = _battleManager.DiscardPosition;
+                cardMovement2.TargetTransform = _battleManager.DiscardPosition;
             }
 
             _battleManager.PlayerHandList[_selectedCardIndex2] = null;

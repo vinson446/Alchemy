@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Deck<Card> _deck = new Deck<Card>();
     public Deck<Card> Deck { get => _deck; set => _deck = value; }
 
-    [SerializeField] int _levelsUnlocked = 0;
+    [SerializeField] int _levelsUnlocked = 1;
     public int LevelsUnlocked => _levelsUnlocked;
 
     [SerializeField] int _gold = 100;
