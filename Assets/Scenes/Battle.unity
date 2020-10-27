@@ -14133,7 +14133,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 4000
+  m_text: 2000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c1e25fcaac2e11348b706197fca0029b, type: 2}
   m_sharedMaterial: {fileID: -5881498957328380897, guid: c1e25fcaac2e11348b706197fca0029b,
@@ -15777,7 +15777,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _elementCard: {fileID: 7409477648936164378, guid: 79910dfd04af4a94588ebb5b242b71c1,
     type: 3}
-  _playerHP: 4000
+  _playerHP: 2000
   _enemyHP: 0
   _playerHPText: {fileID: 1903165892}
   _enemyHPText: {fileID: 1459946820}
