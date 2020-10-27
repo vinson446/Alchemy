@@ -9,12 +9,14 @@ public class EnemyTurnBattleState : BattleState
     public static event Action EnemyTurnBegan;
     public static event Action EnemyTurnEnded;
 
+    [Header("Battle Stuff")]
     [SerializeField] float _pauseDuration = 1.5f;
 
     [Header("References")]
     [SerializeField] List<GameObject> _deckList;
     [SerializeField] ElementCardData[] _deckConfig;
-    [SerializeField] Transform _battlePos;
+    [SerializeField] Transform _initalPos;
+    [SerializeField] Transform _battlePosStandby;
     Deck<Card> _deck = new Deck<Card>();
 
     [Header("Animation Settings")]
@@ -24,13 +26,12 @@ public class EnemyTurnBattleState : BattleState
     [SerializeField] float _duration;
 
     int _monsterIndex;
+    int _prevMonsterIndex;
     GameObject _selectedMonster;
     public GameObject SelectedMonster => _selectedMonster;
 
     public override void Enter()
     {
-        Debug.Log("Enemy Turn: Enter");
-
         EnemyTurnBegan?.Invoke();
 
         StartCoroutine(EnemyThinkingRoutine(_pauseDuration));
@@ -38,22 +39,19 @@ public class EnemyTurnBattleState : BattleState
 
     public override void Exit()
     {
-        Debug.Log("Enemy Turn: Exit");
+
     }
 
     IEnumerator EnemyThinkingRoutine(float pauseDuration)
     {
         PickAMonsterFromDeck();
-
-        yield return new WaitForSeconds(pauseDuration);
-
         SummonMonster();
 
         EnemyTurnEnded?.Invoke();
 
         yield return new WaitForSeconds(pauseDuration);
 
-        StateMachine.ChangeState<FightBattleState>();
+        StateMachine.ChangeState<PlayerTurnBattleState>();
     }
 
     // called by setup battle state
@@ -78,10 +76,14 @@ public class EnemyTurnBattleState : BattleState
 
     void PickAMonsterFromDeck()
     {
-        _monsterIndex = UnityEngine.Random.Range(0, _deckList.Count);
-        _selectedMonster = _deckList[_monsterIndex];
+        _prevMonsterIndex = _monsterIndex;
 
-        print(_deck.GetCard(_monsterIndex).Name);
+        while (_monsterIndex == _prevMonsterIndex)
+        {
+            _monsterIndex = UnityEngine.Random.Range(0, _deckList.Count);
+        }
+
+        _selectedMonster = _deckList[_monsterIndex];
     }
 
     void SummonMonster()
@@ -89,9 +91,21 @@ public class EnemyTurnBattleState : BattleState
         CardMovement cardMovement = _selectedMonster.GetComponent<CardMovement>();
         if (cardMovement != null)
         {
-            cardMovement.TargetTransform = _battlePos;
+            cardMovement.TargetTransform = _battlePosStandby;
         }
+        cardMovement.gameObject.SetActive(true);
 
-        cardMovement.gameObject.transform.DOScale(_growthFactor, _duration);
+        // cardMovement.gameObject.transform.DOScale(_growthFactor, _duration);
+    }
+
+
+    public void ReturnMonsterFromDeck()
+    {
+        CardMovement cardMovement = _selectedMonster.GetComponent<CardMovement>();
+        if (cardMovement != null)
+        {
+            cardMovement.TargetTransform = _initalPos;
+        }
+        cardMovement.gameObject.SetActive(true);
     }
 }

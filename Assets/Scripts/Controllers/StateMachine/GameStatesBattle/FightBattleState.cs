@@ -2,11 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class FightBattleState : BattleState
 {
+    [Header("Battle Stuff")]
+    [SerializeField] GameObject _damageTextObj;
+
     [Header("Positioning Settings")]
+    [SerializeField] Transform _playerBattlePos;
+    [SerializeField] Transform _playerMoveOutPos;
+    [SerializeField] Transform _enemyBattlePos;
+    [SerializeField] Transform _enemyMoveOutPos;
     [SerializeField] Transform _battleCollidePos;
+
+    [SerializeField] Transform _spawnPlayerDmgObj;
+    [SerializeField] Transform _spawnEnemyDmgObj;
 
     [Header("Animation Settings")]
     [SerializeField] float _duration;
@@ -25,8 +36,6 @@ public class FightBattleState : BattleState
 
     public override void Enter()
     {
-        print("Start Battle");
-
         _playerTurnBattleState = GetComponent<PlayerTurnBattleState>();
         _enemyTurnBattleState = GetComponent<EnemyTurnBattleState>();
 
@@ -44,7 +53,7 @@ public class FightBattleState : BattleState
 
     public override void Exit()
     {
-        print("End Battle");
+
     }
 
     void SetVariablesForMonsters()
@@ -55,37 +64,82 @@ public class FightBattleState : BattleState
 
     IEnumerator AnimateBattleCoroutine()
     {
-        // animating fusion
-        Sequence fusionSequence1 = DOTween.Sequence();
-        Sequence fusionSequence2 = DOTween.Sequence();
-        fusionSequence1.Append(_playerMonster.transform.DOMoveX
-            (_battleManager.PlayerPlayingCardPositions[2].transform.position.x, _durationMoveOut));
-        fusionSequence2.Append(_enemyMonster.transform.DOMoveX
-            (_battleManager.PlayerPlayingCardPositions[3].transform.position.x, _durationMoveOut));
+        // let tweening move the cards
+        CardMovement playerCardMovement = _playerMonster.GetComponent<CardMovement>();
+        playerCardMovement.enabled = false;
+        CardMovement enemyCardMovement = _enemyMonster.GetComponent<CardMovement>();
+        enemyCardMovement.enabled = false;
 
-        fusionSequence1.Append(_playerMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn));
-        fusionSequence2.Append(_enemyMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn));
+        // move to battle ready pos
+        _playerMonster.transform.DOMoveX(_playerBattlePos.transform.position.x, _duration);
+        _enemyMonster.transform.DOMoveX(_enemyBattlePos.transform.position.x, _duration);
 
-        fusionSequence1.Play();
-        fusionSequence2.Play();
+        yield return new WaitForSeconds(0.75f);
 
-        yield return new WaitForSeconds(_duration);
+        // move out
+        _playerMonster.transform.DOMoveX(_playerMoveOutPos.transform.position.x, _durationMoveOut * 2);
+        _enemyMonster.transform.DOMoveX(_enemyMoveOutPos.transform.position.x, _durationMoveOut * 2);
+
+        yield return new WaitForSeconds(0.5f + _durationMoveOut * 2);
+
+        // COLLIDE
+        _playerMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn);
+        _enemyMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn);
+
+        yield return new WaitForSeconds(_durationMoveIn);
+
+        // move back to battle ready pos
+        _playerMonster.transform.DOMoveX(_playerBattlePos.position.x, _durationMoveOut);
+        _enemyMonster.transform.DOMoveX(_enemyBattlePos.position.x, _durationMoveOut);
+
+        yield return new WaitForSeconds(0.5f + _duration * 2);
 
         BattleCalculations();
+
+        playerCardMovement.enabled = true;
+        enemyCardMovement.enabled = true;
     }
 
     void BattleCalculations()
     {
+        ElementCardView playerView = _playerMonster.GetComponent<ElementCardView>();
+        ElementCardView enemyView = _enemyMonster.GetComponent<ElementCardView>();
 
+        int playerAttack = playerView.Attack;
+        int enemyDefense = enemyView.Defense;
+        int damageToEnemy = playerAttack - enemyDefense;
+
+        int enemyAttack = enemyView.Attack;
+        int playerDefense = playerView.Defense;
+        int damageToPlayer = enemyAttack - playerDefense;
+
+        _battleManager.UpdateBothHP(damageToPlayer, damageToEnemy);
+        ShowDamagePopup(damageToPlayer, damageToEnemy);
+
+        ResetEverythingForNextTurn();
     }
 
-    void ApplyDamageForPlayer()
+    void ShowDamagePopup(int pDamage, int eDamage)
     {
+        GameObject playerDamageObj = Instantiate(_damageTextObj, _spawnPlayerDmgObj.position, Quaternion.identity);
+        playerDamageObj.GetComponent<DamagePopup>().Setup(pDamage);
+        playerDamageObj.transform.parent = _spawnPlayerDmgObj;
 
+        GameObject enemyDamageObj = Instantiate(_damageTextObj, _spawnEnemyDmgObj.position, Quaternion.identity);
+        enemyDamageObj.GetComponent<DamagePopup>().Setup(eDamage);
+        enemyDamageObj.transform.parent = _spawnEnemyDmgObj;
     }
 
-    void ApplyDamageForEnemy()
+    void ResetEverythingForNextTurn()
     {
+        // reset player stuff
+        _playerMonster.SetActive(false);
+        _playerTurnBattleState.RemoveSelectedCards();
 
+        // reset enemy stuff
+        _enemyMonster.SetActive(false);
+        _enemyTurnBattleState.ReturnMonsterFromDeck();
+
+        StateMachine.ChangeState<EnemyTurnBattleState>();
     }
 }

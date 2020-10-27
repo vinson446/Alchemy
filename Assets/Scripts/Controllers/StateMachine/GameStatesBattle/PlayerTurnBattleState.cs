@@ -30,7 +30,7 @@ public class PlayerTurnBattleState : BattleState
     [SerializeField] float _durationMoveIn;
 
     [Header("Battle Settings")]
-    [SerializeField] Transform _playerBattlePos;
+    [SerializeField] Transform _playerBattlestandbyPos;
 
     bool _selectingFirstCard = true;
     bool _selectingSecondCard = false;
@@ -45,25 +45,23 @@ public class PlayerTurnBattleState : BattleState
 
     public override void Enter()
     {
-        Debug.Log("Player Turn: Entering");
-
         Draw();
     }
 
     public override void Tick()
     {
-        if (_selectedCardIndex1 < 0 || _selectedCardIndex2 < 0)
+        if (_selectedCardIndex1 == -1 || _selectedCardIndex2 == -1)
             CheckForSelection();
     }
 
     public override void Exit()
     {
-        Debug.Log("Player Turn: Exiting");
+
     }
 
-    void StartEnemyTurnBattleState()
+    void StartBattleState()
     {
-        StateMachine.ChangeState<EnemyTurnBattleState>();
+        StateMachine.ChangeState<FightBattleState>();
     }
 
     void Draw()
@@ -106,7 +104,7 @@ public class PlayerTurnBattleState : BattleState
             }
         }
 
-        ResetBackEnd();
+        ResetBothEnds();
     }
 
     IEnumerator MoveCardsInDiscardToDeck()
@@ -426,13 +424,16 @@ public class PlayerTurnBattleState : BattleState
         // animating fusion
         Sequence fusionSequence1 = DOTween.Sequence();
         Sequence fusionSequence2 = DOTween.Sequence();
+
         fusionSequence1.Append(_battleManager.PlayerPlayingCardPositions[0].transform.DOLocalMoveX
             (_battleManager.PlayerPlayingCardPositions[2].transform.localPosition.x, _durationMoveOut));
         fusionSequence2.Append(_battleManager.PlayerPlayingCardPositions[1].transform.DOLocalMoveX
             (_battleManager.PlayerPlayingCardPositions[3].transform.localPosition.x, _durationMoveOut));
 
-        fusionSequence1.Append(_battleManager.PlayerPlayingCardPositions[0].transform.DOLocalMoveX(0, _durationMoveIn));
-        fusionSequence2.Append(_battleManager.PlayerPlayingCardPositions[1].transform.DOLocalMoveX(0, _durationMoveIn));
+        fusionSequence1.Append(_battleManager.PlayerPlayingCardPositions[0].transform.DOLocalMoveX
+            (_battleManager.PlayerPlayingCardPositions[6].transform.localPosition.x, _durationMoveIn));
+        fusionSequence2.Append(_battleManager.PlayerPlayingCardPositions[1].transform.DOLocalMoveX
+            (_battleManager.PlayerPlayingCardPositions[6].transform.localPosition.x, _durationMoveIn));
 
         fusionSequence1.Play();
         fusionSequence2.Play();
@@ -456,28 +457,23 @@ public class PlayerTurnBattleState : BattleState
         _battleManager.PlayerPlayingCardPositions[0].transform.position = _battleManager.PlayerPlayingCardPositions[4].transform.position;
         _battleManager.PlayerPlayingCardPositions[1].transform.position = _battleManager.PlayerPlayingCardPositions[5].transform.position;
 
-        yield return new WaitForSeconds(1f);
-
-        MoveCardToBattlePos();
-
-        // clean up => transition to enemy turn
-        /*
-        _fusionCardView.gameObject.SetActive(false);
-
-        ResetFrontEnd();
-        RemoveSelectedCards();
-        */
+        StartMoveCardToBattlePosCoroutine();
     }
 
-    public void MoveCardToBattlePos()
+    public void StartMoveCardToBattlePosCoroutine()
+    {
+        StartCoroutine(MoveCardToBattlePosCoroutine());
+    }
+
+    IEnumerator MoveCardToBattlePosCoroutine()
     {
         // send first card to battle
         if (_selectedCardIndex2 < 0)
         {
             CardMovement cardMovement = _battleManager.PlayerHandList[_selectedCardIndex1].GetComponent<CardMovement>();
-            cardMovement.TargetTransform = _playerBattlePos;
+            cardMovement.TargetTransform = _playerBattlestandbyPos;   
             cardMovement.gameObject.transform.DOScale(_growthFactor, _duration);
-
+            
             _combatButtonObj.SetActive(false);
             _cancelButtonObj1.SetActive(false);
 
@@ -496,7 +492,7 @@ public class PlayerTurnBattleState : BattleState
         else
         {
             CardMovement cardMovement = _fusionCardView.GetComponent<CardMovement>();
-            cardMovement.TargetTransform = _playerBattlePos;
+            cardMovement.TargetTransform = _playerBattlestandbyPos;
 
             _fuseButtonObj.SetActive(false);
             _cancelButtonObj2.SetActive(false);
@@ -510,10 +506,12 @@ public class PlayerTurnBattleState : BattleState
             _selectedMonster = _fusionCardView.gameObject;
         }
 
-        StartEnemyTurnBattleState();
+        yield return new WaitForSeconds(1f);
+
+        StartBattleState();
     }
 
-    void RemoveSelectedCards()
+     public void RemoveSelectedCards()
     {
         if (_selectedCardIndex1 != -1)
         {
@@ -559,6 +557,31 @@ public class PlayerTurnBattleState : BattleState
             Card card = _battleManager.PlayerHand.GetCard(_selectedCardIndex2);
             _battleManager.Discard.Add(card, DeckPosition.Top);
             _battleManager.PlayerHand.LazyRemove(_selectedCardIndex2);
+        }
+
+        ResetShrinkAndPositoning();
+    }
+
+    void ResetShrinkAndPositoning()
+    {
+        for (int i = 0; i < _battleManager.PlayerShrinkPositions.Length; i++)
+        {
+            if (_battleManager.PlayerHandList[i] != null)
+            {
+                CardMovement cardMovement = _battleManager.PlayerHandList[i].GetComponent<CardMovement>();
+                if (cardMovement != null)
+                {
+                    cardMovement.TargetTransform = _battleManager.PlayerHandPositions[i];
+                    cardMovement.transform.parent = _battleManager.PlayerHandPositions[i];
+                    cardMovement.gameObject.SetActive(true);
+
+                    GameObject glowImageObj = cardMovement.gameObject;
+                    Image glowImage = glowImageObj.transform.GetChild(0).gameObject.GetComponent<Image>();
+                    glowImage.enabled = false;
+                }
+
+                _battleManager.PlayerHandList[i].transform.DOScale(_normFactor, _duration);
+            }
         }
     }
 }

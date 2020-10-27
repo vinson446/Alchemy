@@ -14,7 +14,6 @@ public class SetupBattleState : BattleState
 
     public override void Enter()
     {
-        Debug.Log("Setup: Entering");
         _activated = false;
 
         // CANT change state while still in Enter()/Exit() transition
@@ -36,13 +35,12 @@ public class SetupBattleState : BattleState
         if (_activated == false)
         {
             _activated = true;
-            StateMachine.ChangeState<PlayerTurnBattleState>();
+            StateMachine.ChangeState<EnemyTurnBattleState>();
         }
     }
 
     public override void Exit()
     {
-        Debug.Log("Setup: Exiting");
         _activated = false;
     }
 

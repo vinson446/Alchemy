@@ -12,7 +12,9 @@ public class ElementCardView : MonoBehaviour
     [SerializeField] TextMeshProUGUI _nameTextUI;
     [SerializeField] TextMeshProUGUI _levelTextUI;
     [SerializeField] TextMeshProUGUI _attackText;
+    public int Attack;
     [SerializeField] TextMeshProUGUI _defenseText;
+    public int Defense;
 
     [SerializeField] Image _elementSprite;
     [SerializeField] Image _elementSpriteBackground;
@@ -25,7 +27,9 @@ public class ElementCardView : MonoBehaviour
         _nameTextUI.text = card.Name;
         _levelTextUI.text = card.Level.ToString();
         _attackText.text = card.Attack.ToString();
+        Attack = card.Attack;
         _defenseText.text = card.Defense.ToString();
+        Defense = card.Defense;
 
         _elementSprite.sprite = card.Sprite;
         _elementSpriteBackground.sprite = card.SpriteBackground;

@@ -72,8 +72,10 @@ public class BattleManager : MonoBehaviour
 
     public void UpdateBothHP(int p, int e)
     {
-        _playerHP -= p;
-        _enemyHP -= e;
+        if (p > 0)
+            _playerHP -= p;
+        if (e > 0)
+            _enemyHP -= e;
 
         _playerHPText.text = _playerHP.ToString();
         _enemyHPText.text = _enemyHP.ToString();
