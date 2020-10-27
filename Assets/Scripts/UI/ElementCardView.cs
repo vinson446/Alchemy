@@ -11,10 +11,14 @@ public class ElementCardView : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI _nameTextUI;
     [SerializeField] TextMeshProUGUI _levelTextUI;
+    public int Level;
+    int _levelBoost;
     [SerializeField] TextMeshProUGUI _attackText;
     public int Attack;
+    int _attackBoost;
     [SerializeField] TextMeshProUGUI _defenseText;
     public int Defense;
+    int _defenseBoost;
 
     [SerializeField] Image _elementSprite;
     [SerializeField] Image _elementSpriteBackground;
@@ -23,16 +27,29 @@ public class ElementCardView : MonoBehaviour
     public void Display(ElementCard card)
     {
         Name = card.Name;
-
         _nameTextUI.text = card.Name;
-        _levelTextUI.text = card.Level.ToString();
-        _attackText.text = card.Attack.ToString();
-        Attack = card.Attack;
-        _defenseText.text = card.Defense.ToString();
-        Defense = card.Defense;
+
+        Level = card.Level + _levelBoost;
+        _levelTextUI.text = Level.ToString();
+
+        Attack = card.Attack + _attackBoost;
+        _attackText.text = Attack.ToString();
+
+        Defense = card.Defense + _defenseBoost;
+        _defenseText.text = Defense.ToString();
 
         _elementSprite.sprite = card.Sprite;
         _elementSpriteBackground.sprite = card.SpriteBackground;
         _elementCardBackground.sprite = card.CardBackground;
+    }
+
+    public void EnemyBattleUpgrade()
+    {
+        GameManager gameManager = FindObjectOfType<GameManager>();
+
+        _attackBoost = (gameManager.LevelsUnlocked - 1) * 1000;
+        _defenseBoost = (gameManager.LevelsUnlocked - 1) * 1000;
+
+        _levelBoost = (gameManager.LevelsUnlocked - 1);
     }
 }

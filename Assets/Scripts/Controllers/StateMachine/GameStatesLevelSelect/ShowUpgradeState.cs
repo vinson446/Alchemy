@@ -93,7 +93,7 @@ public class ShowUpgradeState : LevelSelectState
         if (_gold >= _cost)
         {
             // decrement gold
-            _gameManager.ChangeGold(_gold - _cost);
+            _gameManager.IncrementGold(-_cost);
 
             // upgrade card
             ElementCard card = (ElementCard)_gameManager.Deck.GetCard(_cardInDeckIndex);

@@ -64,7 +64,10 @@ public class EnemyTurnBattleState : BattleState
 
             ElementCardView cardView = _deckList[i].GetComponent<ElementCardView>();
             if (cardView != null)
+            {
+                cardView.EnemyBattleUpgrade();
                 cardView.Display(elementCard);
+            }
         }
     }
 

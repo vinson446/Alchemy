@@ -37,8 +37,8 @@ public class ElementCard : Card
 
     public void UpgradeCard()
     {
-        Attack *= 2;
-        Defense *= 2;
+        Attack += Level * 500;
+        Defense += Level * 500;
 
         Level++;
     }

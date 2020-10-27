@@ -1123,8 +1123,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 37bae8231a8e7564885ed068e4ea3cd2, type: 2}
   - {fileID: 11400000, guid: 37bae8231a8e7564885ed068e4ea3cd2, type: 2}
   - {fileID: 11400000, guid: 37bae8231a8e7564885ed068e4ea3cd2, type: 2}
-  _levelsUnlocked: 0
-  _gold: 100
+  _levelsUnlocked: 1
+  _gold: 1000
 --- !u!4 &2135871731
 Transform:
   m_ObjectHideFlags: 0

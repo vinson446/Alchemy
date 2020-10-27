@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
@@ -17,6 +18,12 @@ public class BattleManager : MonoBehaviour
     public int EnemyHP => _enemyHP;
     [SerializeField] TextMeshProUGUI _playerHPText;
     [SerializeField] TextMeshProUGUI _enemyHPText;
+
+    [Header("References")]
+    [SerializeField] GameObject winLosePanel;
+    [SerializeField] TextMeshProUGUI winLoseText;
+    [SerializeField] TextMeshProUGUI rewardText;
+    [SerializeField] int goldReward;
 
     [Header("Frontend- Lists")]
     [SerializeField] List<GameObject> _deckList;
@@ -66,11 +73,11 @@ public class BattleManager : MonoBehaviour
 
     public void SetupEnemyHP()
     {
-        _enemyHP = _playerHP + _gameManager.LevelsUnlocked * 500;
+        _enemyHP = 2000 + _gameManager.LevelsUnlocked * 500;
         _enemyHPText.text = _enemyHP.ToString();
     }
 
-    public void UpdateBothHP(int p, int e)
+    public bool UpdateBothHP(int p, int e)
     {
         if (p > 0)
             _playerHP -= p;
@@ -84,21 +91,45 @@ public class BattleManager : MonoBehaviour
         if (_enemyHP <= 0)
         {
             WinBattle();
+            BattleSM stateMachine = FindObjectOfType<BattleSM>();
+            stateMachine.ChangeState<ExitBattleState>();
+            return false;
         }
         // lose battle
         else if (_playerHP <= 0)
         {
             LoseBattle();
+            BattleSM stateMachine = FindObjectOfType<BattleSM>();
+            stateMachine.ChangeState<ExitBattleState>();
+            return false;
         }
+
+        return true;
     }
 
     void WinBattle()
     {
+        winLosePanel.SetActive(true);
+        winLoseText.text = "Victory!";
 
+        goldReward = 100;
+        rewardText.text = "+" + goldReward.ToString() + " Gold";
+
+        _gameManager.IncrementGold(goldReward);
+        _gameManager.UnlockLevel();
     }
 
     void LoseBattle()
     {
+        winLosePanel.SetActive(true);
+        winLoseText.text = "Defeat...";
 
+        goldReward = 0;
+        rewardText.text = "";
+    }
+
+    public void ReturnToLevelSelect()
+    {
+        SceneManager.LoadScene("LevelSelect");
     }
 }

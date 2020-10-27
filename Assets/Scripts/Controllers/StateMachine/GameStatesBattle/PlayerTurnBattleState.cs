@@ -173,7 +173,7 @@ public class PlayerTurnBattleState : BattleState
                 if (slot != null)
                 {
                     int index = int.Parse(slot.name);
-                    SelectCard(index, _selectingFirstCard);
+                    SelectCardCoroutine(index, _selectingFirstCard);
                 }
                 // let combat button be clicked if it has been
                 else if (result.gameObject.GetComponentInParent<Button>() != null)
@@ -184,8 +184,6 @@ public class PlayerTurnBattleState : BattleState
                 else
                 {
                     ResetBothEnds();
-
-                    break;
                 }
                 break;
             }
@@ -264,7 +262,7 @@ public class PlayerTurnBattleState : BattleState
     }
 
     // SelectManager calls this function based on card slot picked
-    void SelectCard(int index, bool first)
+    void SelectCardCoroutine(int index, bool first)
     {
         if (first)
             _selectedCardIndex1 = index;
@@ -487,6 +485,7 @@ public class PlayerTurnBattleState : BattleState
             }
 
             _selectedMonster = _battleManager.PlayerHandList[_selectedCardIndex1];
+            _selectedMonster.tag = "Monster";
         }
         // send fusion card to battle
         else
@@ -504,6 +503,7 @@ public class PlayerTurnBattleState : BattleState
             }
 
             _selectedMonster = _fusionCardView.gameObject;
+            _selectedMonster.tag = "FusionMonster";
         }
 
         yield return new WaitForSeconds(1f);

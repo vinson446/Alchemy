@@ -23,7 +23,8 @@ public class ShowLevelSelectState : LevelSelectState
 
     private void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();    
+        gameManager = FindObjectOfType<GameManager>();
+        UnlockLevels();
     }
 
     public override void Enter()
@@ -42,7 +43,13 @@ public class ShowLevelSelectState : LevelSelectState
 
     public override void Tick()
     {
-
+        for (int i = 0; i < _allLevels.Length; i++)
+        {
+            if (i < gameManager.LevelsUnlocked)
+                _allLevels[i].GetComponent<Button>().interactable = true;
+            else
+                _allLevels[i].GetComponent<Button>().interactable = false;
+        }
     }
 
     public override void Exit()
@@ -82,9 +89,14 @@ public class ShowLevelSelectState : LevelSelectState
         SceneManager.LoadScene("Menu");
     }
 
+    void UnlockLevels()
+    {
+
+    }
+
     void RightArrow()
     {
-        if ((_currentStageIndex < _allLevels.Length - 1) && (_currentStageIndex < gameManager.LevelsUnlocked))
+        if ((_currentStageIndex < _allLevels.Length - 1) && (_currentStageIndex < gameManager.LevelsUnlocked - 1))
         {
             _previousStageIndex = _currentStageIndex;
             _currentStageIndex += 1;

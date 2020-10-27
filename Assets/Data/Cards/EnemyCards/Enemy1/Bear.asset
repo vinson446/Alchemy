@@ -17,7 +17,7 @@ MonoBehaviour:
   _attack: 600
   _defense: 600
   _description: 
-  _sprite: {fileID: 0}
+  _sprite: {fileID: 21300000, guid: 5fabe541a1ddf0741b6cf948fdbdc3fb, type: 3}
   _spriteBackground: {fileID: 0}
   _cardBackground: {fileID: 0}
   _playEffect: {fileID: 0}

@@ -17,7 +17,9 @@ public class FightBattleState : BattleState
     [SerializeField] Transform _battleCollidePos;
 
     [SerializeField] Transform _spawnPlayerDmgObj;
+    [SerializeField] Transform _spawnPlayerMessageObj;
     [SerializeField] Transform _spawnEnemyDmgObj;
+    [SerializeField] Transform _spawnEnemyMessageObj;
 
     [Header("Animation Settings")]
     [SerializeField] float _duration;
@@ -74,13 +76,20 @@ public class FightBattleState : BattleState
         _playerMonster.transform.DOMoveX(_playerBattlePos.transform.position.x, _duration);
         _enemyMonster.transform.DOMoveX(_enemyBattlePos.transform.position.x, _duration);
 
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(_duration);
+
+        if (_playerMonster.tag == "FusionMonster")
+        {
+            // activate player play effect
+            ActivatePlayerPlayEffect();
+            yield return new WaitForSeconds(1f);
+        }
 
         // move out
-        _playerMonster.transform.DOMoveX(_playerMoveOutPos.transform.position.x, _durationMoveOut * 2);
-        _enemyMonster.transform.DOMoveX(_enemyMoveOutPos.transform.position.x, _durationMoveOut * 2);
+        _playerMonster.transform.DOMoveX(_playerMoveOutPos.transform.position.x, _durationMoveOut);
+        _enemyMonster.transform.DOMoveX(_enemyMoveOutPos.transform.position.x, _durationMoveOut);
 
-        yield return new WaitForSeconds(0.5f + _durationMoveOut * 2);
+        yield return new WaitForSeconds(_durationMoveOut);
 
         // COLLIDE
         _playerMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn);
@@ -89,10 +98,10 @@ public class FightBattleState : BattleState
         yield return new WaitForSeconds(_durationMoveIn);
 
         // move back to battle ready pos
-        _playerMonster.transform.DOMoveX(_playerBattlePos.position.x, _durationMoveOut);
-        _enemyMonster.transform.DOMoveX(_enemyBattlePos.position.x, _durationMoveOut);
+        _playerMonster.transform.DOMoveX(_playerBattlePos.position.x, _durationMoveIn);
+        _enemyMonster.transform.DOMoveX(_enemyBattlePos.position.x, _durationMoveIn);
 
-        yield return new WaitForSeconds(0.5f + _duration * 2);
+        yield return new WaitForSeconds(_durationMoveIn * 2);
 
         BattleCalculations();
 
@@ -113,20 +122,38 @@ public class FightBattleState : BattleState
         int playerDefense = playerView.Defense;
         int damageToPlayer = enemyAttack - playerDefense;
 
-        _battleManager.UpdateBothHP(damageToPlayer, damageToEnemy);
+        bool continueGame = _battleManager.UpdateBothHP(damageToPlayer, damageToEnemy);
         ShowDamagePopup(damageToPlayer, damageToEnemy);
 
-        ResetEverythingForNextTurn();
+        if (continueGame)
+            ResetEverythingForNextTurn();
     }
 
     void ShowDamagePopup(int pDamage, int eDamage)
     {
         GameObject playerDamageObj = Instantiate(_damageTextObj, _spawnPlayerDmgObj.position, Quaternion.identity);
-        playerDamageObj.GetComponent<DamagePopup>().Setup(pDamage);
+        playerDamageObj.GetComponent<DamagePopup>().SetupDamage(pDamage, 1f);
         playerDamageObj.transform.parent = _spawnPlayerDmgObj;
 
         GameObject enemyDamageObj = Instantiate(_damageTextObj, _spawnEnemyDmgObj.position, Quaternion.identity);
-        enemyDamageObj.GetComponent<DamagePopup>().Setup(eDamage);
+        enemyDamageObj.GetComponent<DamagePopup>().SetupDamage(eDamage, 1f);
+        enemyDamageObj.transform.parent = _spawnEnemyDmgObj;
+    }
+
+    void ActivatePlayerPlayEffect()
+    {
+        GameObject playerDamageObj = Instantiate(_damageTextObj, _spawnPlayerMessageObj.position, Quaternion.identity);
+
+        ElementCardView cardView = _playerMonster.GetComponent<ElementCardView>();
+        playerDamageObj.GetComponent<DamagePopup>().SetupMessage("Activate " + cardView.Name + "\nPlay Effect", 1f);
+
+        playerDamageObj.transform.parent = _spawnPlayerMessageObj;
+    }
+
+    void ActivateEnemyPlayEffect()
+    {
+        GameObject enemyDamageObj = Instantiate(_damageTextObj, _spawnEnemyMessageObj.position, Quaternion.identity);
+        enemyDamageObj.GetComponent<DamagePopup>().SetupMessage("Activate Play Effect", 1f);
         enemyDamageObj.transform.parent = _spawnEnemyDmgObj;
     }
 

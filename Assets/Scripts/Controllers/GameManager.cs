@@ -52,8 +52,8 @@ public class GameManager : MonoBehaviour
         _levelsUnlocked++;
     }
 
-    public void ChangeGold(int gold)
+    public void IncrementGold(int gold)
     {
-        _gold = gold;
+        _gold += gold;
     }
 }
