@@ -24,6 +24,8 @@ public class ElementCardView : MonoBehaviour
     [SerializeField] Image _elementSpriteBackground;
     [SerializeField] Image _elementCardBackground;
 
+    ElementCard _elementCard;
+
     public void Display(ElementCard card)
     {
         Name = card.Name;
@@ -41,6 +43,8 @@ public class ElementCardView : MonoBehaviour
         _elementSprite.sprite = card.Sprite;
         _elementSpriteBackground.sprite = card.SpriteBackground;
         _elementCardBackground.sprite = card.CardBackground;
+
+        _elementCard = card;
     }
 
     public void EnemyBattleUpgrade()
@@ -51,5 +55,21 @@ public class ElementCardView : MonoBehaviour
         _defenseBoost = (gameManager.LevelsUnlocked - 1) * 1000;
 
         _levelBoost = (gameManager.LevelsUnlocked - 1);
+    }
+
+    public void StatChange(int atkChange, int defChange, int lvlChange)
+    {
+        Attack = atkChange;
+        Defense = defChange;
+        Level = lvlChange;
+
+        _attackText.text = Attack.ToString();
+        _defenseText.text = Defense.ToString();
+        _levelTextUI.text = Level.ToString();
+    }
+
+    public void PlayCardEffect()
+    {
+        _elementCard.Play();
     }
 }

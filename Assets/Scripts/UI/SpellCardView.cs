@@ -18,6 +18,8 @@ public class SpellCardView : MonoBehaviour
     [SerializeField] Image _spellSpriteBackground;
     [SerializeField] Image _spellCardBackground;
 
+    [SerializeField] CardPlayEffect cardPlayEffect;
+
     public void Display(SpellCard spellCard)
     {
         Name = spellCard.Name;

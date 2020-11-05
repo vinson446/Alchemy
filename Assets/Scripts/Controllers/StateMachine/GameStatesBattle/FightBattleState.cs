@@ -27,9 +27,9 @@ public class FightBattleState : BattleState
     [SerializeField] float _durationMoveIn;
 
     PlayerTurnBattleState _playerTurnBattleState;
-    GameObject _playerMonster;
+    public GameObject _playerMonster { get; private set; }
     EnemyTurnBattleState _enemyTurnBattleState;
-    GameObject _enemyMonster;
+    public GameObject _enemyMonster { get; private set; }
 
     BattleManager _battleManager;
 
@@ -66,6 +66,8 @@ public class FightBattleState : BattleState
 
     IEnumerator AnimateBattleCoroutine()
     {
+        bool continueBattle = true;
+
         // let tweening move the cards
         CardMovement playerCardMovement = _playerMonster.GetComponent<CardMovement>();
         playerCardMovement.enabled = false;
@@ -81,32 +83,41 @@ public class FightBattleState : BattleState
         if (_playerMonster.tag == "FusionMonster")
         {
             // activate player play effect
-            ActivatePlayerPlayEffect();
+            continueBattle = ActivatePlayerPlayEffect();
             yield return new WaitForSeconds(1f);
         }
+        if (continueBattle)
+        {
+            // move out
+            _playerMonster.transform.DOMoveX(_playerMoveOutPos.transform.position.x, _durationMoveOut);
+            _enemyMonster.transform.DOMoveX(_enemyMoveOutPos.transform.position.x, _durationMoveOut);
 
-        // move out
-        _playerMonster.transform.DOMoveX(_playerMoveOutPos.transform.position.x, _durationMoveOut);
-        _enemyMonster.transform.DOMoveX(_enemyMoveOutPos.transform.position.x, _durationMoveOut);
+            yield return new WaitForSeconds(_durationMoveOut);
 
-        yield return new WaitForSeconds(_durationMoveOut);
+            // COLLIDE
+            _playerMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn);
+            _enemyMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn);
 
-        // COLLIDE
-        _playerMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn);
-        _enemyMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn);
+            yield return new WaitForSeconds(_durationMoveIn);
 
-        yield return new WaitForSeconds(_durationMoveIn);
+            // move back to battle ready pos
+            _playerMonster.transform.DOMoveX(_playerBattlePos.position.x, _durationMoveIn);
+            _enemyMonster.transform.DOMoveX(_enemyBattlePos.position.x, _durationMoveIn);
 
-        // move back to battle ready pos
-        _playerMonster.transform.DOMoveX(_playerBattlePos.position.x, _durationMoveIn);
-        _enemyMonster.transform.DOMoveX(_enemyBattlePos.position.x, _durationMoveIn);
+            yield return new WaitForSeconds(_durationMoveIn * 2);
 
-        yield return new WaitForSeconds(_durationMoveIn * 2);
+            BattleCalculations();
 
-        BattleCalculations();
+            playerCardMovement.enabled = true;
+            enemyCardMovement.enabled = true;
+        }
+        else
+        {
+            playerCardMovement.enabled = true;
+            enemyCardMovement.enabled = true;
 
-        playerCardMovement.enabled = true;
-        enemyCardMovement.enabled = true;
+            ResetEverythingForNextTurn();
+        }
     }
 
     void BattleCalculations()
@@ -117,19 +128,23 @@ public class FightBattleState : BattleState
         int playerAttack = playerView.Attack;
         int enemyDefense = enemyView.Defense;
         int damageToEnemy = playerAttack - enemyDefense;
+        if (damageToEnemy < 0)
+            damageToEnemy = 0;
 
         int enemyAttack = enemyView.Attack;
         int playerDefense = playerView.Defense;
         int damageToPlayer = enemyAttack - playerDefense;
+        if (damageToPlayer < 0)
+            damageToPlayer = 0;
 
-        bool continueGame = _battleManager.UpdateBothHP(damageToPlayer, damageToEnemy);
-        ShowDamagePopup(damageToPlayer, damageToEnemy);
+        bool continueGame = _battleManager.UpdateBothHP(-damageToPlayer, -damageToEnemy);
+        ShowDamagePopup(-damageToPlayer, -damageToEnemy);
 
         if (continueGame)
             ResetEverythingForNextTurn();
     }
 
-    void ShowDamagePopup(int pDamage, int eDamage)
+    public void ShowDamagePopup(int pDamage, int eDamage)
     {
         GameObject playerDamageObj = Instantiate(_damageTextObj, _spawnPlayerDmgObj.position, Quaternion.identity);
         playerDamageObj.GetComponent<DamagePopup>().SetupDamage(pDamage, 1f);
@@ -140,22 +155,30 @@ public class FightBattleState : BattleState
         enemyDamageObj.transform.parent = _spawnEnemyDmgObj;
     }
 
-    void ActivatePlayerPlayEffect()
+    bool ActivatePlayerPlayEffect()
     {
         GameObject playerDamageObj = Instantiate(_damageTextObj, _spawnPlayerMessageObj.position, Quaternion.identity);
 
         ElementCardView cardView = _playerMonster.GetComponent<ElementCardView>();
         playerDamageObj.GetComponent<DamagePopup>().SetupMessage("Activate " + cardView.Name + "\nPlay Effect", 1f);
-
         playerDamageObj.transform.parent = _spawnPlayerMessageObj;
+
+        cardView.PlayCardEffect();
+
+        if (cardView.Name == "Ghost")
+            return false;
+        else
+            return true;
     }
 
+    /*
     void ActivateEnemyPlayEffect()
     {
         GameObject enemyDamageObj = Instantiate(_damageTextObj, _spawnEnemyMessageObj.position, Quaternion.identity);
         enemyDamageObj.GetComponent<DamagePopup>().SetupMessage("Activate Play Effect", 1f);
         enemyDamageObj.transform.parent = _spawnEnemyDmgObj;
     }
+    */
 
     void ResetEverythingForNextTurn()
     {

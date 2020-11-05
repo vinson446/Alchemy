@@ -79,26 +79,24 @@ public class BattleManager : MonoBehaviour
 
     public bool UpdateBothHP(int p, int e)
     {
-        if (p > 0)
-            _playerHP -= p;
-        if (e > 0)
-            _enemyHP -= e;
+        _playerHP += p;
+        _enemyHP += e;
 
         _playerHPText.text = _playerHP.ToString();
         _enemyHPText.text = _enemyHP.ToString();
 
-        // win battle
-        if (_enemyHP <= 0)
+        // lose battle
+        if (_playerHP <= 0)
         {
-            WinBattle();
+            LoseBattle();
             BattleSM stateMachine = FindObjectOfType<BattleSM>();
             stateMachine.ChangeState<ExitBattleState>();
             return false;
         }
-        // lose battle
-        else if (_playerHP <= 0)
+        // win battle
+        else if (_enemyHP <= 0)
         {
-            LoseBattle();
+            WinBattle();
             BattleSM stateMachine = FindObjectOfType<BattleSM>();
             stateMachine.ChangeState<ExitBattleState>();
             return false;

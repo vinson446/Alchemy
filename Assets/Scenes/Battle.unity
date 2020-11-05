@@ -3909,6 +3909,7 @@ GameObject:
   - component: {fileID: 368446618}
   - component: {fileID: 368446619}
   - component: {fileID: 368446621}
+  - component: {fileID: 368446624}
   - component: {fileID: 368446620}
   - component: {fileID: 368446622}
   - component: {fileID: 368446623}
@@ -3974,10 +3975,6 @@ MonoBehaviour:
   _battleManager: {fileID: 2037565892}
   _raycaster: {fileID: 2078445312}
   _eventSystem: {fileID: 2078445313}
-  _normFactor: 0.6
-  _shrinkFactor: 0.5
-  _growthFactor: 1.5
-  _duration: 0.25
   _fusionCardView: {fileID: 1116930765}
   _combatButtonObj: {fileID: 938084116}
   _cancelButtonObj1: {fileID: 1324215137}
@@ -3986,6 +3983,10 @@ MonoBehaviour:
   _durationMoveOut: 0.5
   _durationMoveIn: 0.25
   _playerBattlestandbyPos: {fileID: 1526307830}
+  _normFactor: 0.6
+  _shrinkFactor: 0.5
+  _growthFactor: 1.5
+  _duration: 0.25
   _selectedCardIndex1: -2
   _selectedCardIndex2: -2
 --- !u!114 &368446621
@@ -4067,6 +4068,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07fe8ff7fcad2744e86a97f1b1a2e85e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &368446624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368446616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed812858c060e9d4eb5dd840faf72877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _battleManager: {fileID: 2037565892}
 --- !u!1 &409845302
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,12 +27,12 @@ public class ElementCard : Card
         FusionCombinations = Data.FusionCombinations;
         FusionMonsters = Data.FusionMonsters;
 
-        PlayEffect = Data.PlayEffect;
+        CardEffect = Data.CardEffect;
     }
-    
+
     public override void Play()
     {
-
+        CardEffect.Activate();
     }
 
     public void UpgradeCard()

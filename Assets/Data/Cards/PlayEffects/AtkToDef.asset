@@ -9,8 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7e8ea5386d7cea4fb536453b701135e, type: 3}
-  m_Name: NewSpawnPlayEffect
+  m_Script: {fileID: 11500000, guid: c6c861ac7d7979548af2c9e7a074ceae, type: 3}
+  m_Name: AtkToDef
   m_EditorClassIdentifier: 
-  _prefabToSpawn: {fileID: 823099727154743308, guid: 5f751ff99cd12624eb86198e08017b34,
-    type: 3}

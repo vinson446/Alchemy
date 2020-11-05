@@ -16,7 +16,7 @@ public abstract class Card
     public Sprite SpriteBackground { get; protected set; }
     public Sprite CardBackground { get; protected set; }
 
-    public CardPlayEffect PlayEffect { get; protected set; }
+    public CardPlayEffect CardEffect { get; protected set; }
 
     public abstract void Play();
 }

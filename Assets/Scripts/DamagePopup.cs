@@ -16,12 +16,13 @@ public class DamagePopup : MonoBehaviour
 
     public void SetupDamage(int damageAmt, float duration)
     {
-        if (damageAmt > 0)
-        {
-            _textMesh = GetComponentInChildren<TextMeshProUGUI>();
-            _textMesh.color = Color.red;
-            _textMesh.text = "-" + damageAmt.ToString();
-        }
+        _textMesh = GetComponentInChildren<TextMeshProUGUI>();
+
+        _textMesh.color = Color.red;
+        if (damageAmt < 0)
+            _textMesh.text = damageAmt.ToString();
+        else if (damageAmt > 0)
+            _textMesh.text = "+" + damageAmt.ToString();
     }
 
     public void SetupMessage(string message, float duration)

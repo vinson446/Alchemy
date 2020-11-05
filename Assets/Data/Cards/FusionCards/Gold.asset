@@ -20,6 +20,6 @@ MonoBehaviour:
   _sprite: {fileID: 21300000, guid: 961b803edef008e45b6895afb3f9e359, type: 3}
   _spriteBackground: {fileID: 0}
   _cardBackground: {fileID: 0}
-  _playEffect: {fileID: 0}
   _fusionCombinations: []
   _fusionMonsters: []
+  _cardEffect: {fileID: 11400000, guid: bcd9745e747675344be825699d2d78ea, type: 2}

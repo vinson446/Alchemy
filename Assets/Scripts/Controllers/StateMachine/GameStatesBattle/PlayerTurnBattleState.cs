@@ -1,24 +1,17 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using DG.Tweening;
+using UnityEngine.UI;
 
 public class PlayerTurnBattleState : BattleState
 {
     [SerializeField] BattleManager _battleManager;
 
-    // normal raycasts do not work on UI elements, they require a special kind
     [SerializeField] GraphicRaycaster _raycaster;
     PointerEventData _pointerEventData;
     [SerializeField] EventSystem _eventSystem;
-
-    [Header("Animation Settings")]
-    [SerializeField] float _normFactor;
-    [SerializeField] float _shrinkFactor;
-    [SerializeField] float _growthFactor;
-    [SerializeField] float _duration;
 
     [Header("Fusion Card Settings")]
     [SerializeField] ElementCardView _fusionCardView;
@@ -31,6 +24,12 @@ public class PlayerTurnBattleState : BattleState
 
     [Header("Battle Settings")]
     [SerializeField] Transform _playerBattlestandbyPos;
+
+    [Header("Animation Settings")]
+    [SerializeField] float _normFactor;
+    [SerializeField] float _shrinkFactor;
+    [SerializeField] float _growthFactor;
+    [SerializeField] float _duration;
 
     bool _selectingFirstCard = true;
     bool _selectingSecondCard = false;
@@ -45,7 +44,7 @@ public class PlayerTurnBattleState : BattleState
 
     public override void Enter()
     {
-        Draw();
+        
     }
 
     public override void Tick()
@@ -57,99 +56,6 @@ public class PlayerTurnBattleState : BattleState
     public override void Exit()
     {
 
-    }
-
-    void StartBattleState()
-    {
-        StateMachine.ChangeState<FightBattleState>();
-    }
-
-    void Draw()
-    {
-        StartCoroutine(DrawCoroutine());
-    }
-
-    IEnumerator DrawCoroutine()
-    {
-        for (int i = 0; i < _battleManager.PlayerHandPositions.Length; i++)
-        {
-            if (_battleManager.BattleDeck.IsEmpty)
-            {
-                ShuffleDeck();
-
-                yield return new WaitForSeconds(2f);
-            }
-
-            if (!_battleManager.BattleDeck.IsEmpty && _battleManager.PlayerHandPositions[i].transform.childCount == 0)
-            {
-                // front end- get top card of deck, then move card to an empty hand slot
-                GameObject cardDrawn = _battleManager.DeckList[_battleManager.BattleDeck.LastIndex];
-                _battleManager.PlayerHandList[i] = cardDrawn;
-
-                cardDrawn.transform.parent = _battleManager.PlayerHandPositions[i].transform;
-
-                CardMovement cardMovement = cardDrawn.GetComponent<CardMovement>();
-                if (cardMovement != null)
-                {
-                    cardMovement.TargetTransform = _battleManager.PlayerHandPositions[i].transform;
-                }
-
-                _battleManager.DeckList.Remove(cardDrawn);
-
-                yield return new WaitForSeconds(0.2f);
-
-                // back end- draw from battle deck to player hand
-                Card newCard = _battleManager.BattleDeck.Draw(DeckPosition.Top);
-                _battleManager.PlayerHand.LazyAdd(newCard, i);
-            }
-        }
-
-        ResetBothEnds();
-    }
-
-    IEnumerator MoveCardsInDiscardToDeck()
-    {
-        int count = _battleManager.Discard.Count;
-        for (int i = 0; i < count; i++)
-        {
-            // front end- add cards in discard to deck
-            CardMovement cardMovement = _battleManager.DiscardList[0].GetComponent<CardMovement>();
-            cardMovement.transform.parent = _battleManager.DeckPos;
-            if (cardMovement != null)
-            {
-                cardMovement.TargetTransform = _battleManager.DeckPos;
-            }
-            _battleManager.DeckList.Add(_battleManager.DiscardList[0]);
-            _battleManager.DiscardList.Remove(_battleManager.DiscardList[0]);
-
-            // back end- add cards in discard to deck
-            _battleManager.BattleDeck.Add(_battleManager.Discard.GetCard(0));
-            _battleManager.Discard.Remove(0);
-
-            yield return new WaitForSeconds(0.2f);
-        }
-
-        // back end
-        _battleManager.BattleDeck.Shuffle(_battleManager.DeckList);
-        ShowAllCardsInDeck();
-    }
-
-    void ShuffleDeck()
-    {
-        // front end
-        // TODO- cool shuffle animation
-        StartCoroutine(MoveCardsInDiscardToDeck());
-    }
-
-    // display cards visually in battle deck
-    void ShowAllCardsInDeck()
-    {
-        for (int i = 0; i < _battleManager.BattleDeck.Count; i++)
-        {
-            ElementCardView c = _battleManager.DeckList[i].GetComponent<ElementCardView>();
-            ElementCard newCard = (ElementCard)_battleManager.BattleDeck.GetCard(i);
-            c.Display(newCard);
-        }
     }
 
     void CheckForSelection()
@@ -188,6 +94,11 @@ public class PlayerTurnBattleState : BattleState
                 break;
             }
         }
+    }
+
+    void StartBattleState()
+    {
+        StateMachine.ChangeState<FightBattleState>();
     }
 
     public void ResetBothEnds()
@@ -414,6 +325,10 @@ public class PlayerTurnBattleState : BattleState
     public void StartFusionCoroutine()
     {
         _finishedPlayerAction = true;
+
+        _fuseButtonObj.SetActive(false);
+        _cancelButtonObj2.SetActive(false);
+
         StartCoroutine(FusionCoroutine());
     }
 
@@ -460,6 +375,13 @@ public class PlayerTurnBattleState : BattleState
 
     public void StartMoveCardToBattlePosCoroutine()
     {
+        _combatButtonObj.SetActive(false);
+        _cancelButtonObj1.SetActive(false);
+
+        // stop first card from being sent back to hand if player presses cancel during battle transition
+        if (_selectedCardIndex2 == -1)
+            _selectedCardIndex2 = -2;
+
         StartCoroutine(MoveCardToBattlePosCoroutine());
     }
 
@@ -471,9 +393,6 @@ public class PlayerTurnBattleState : BattleState
             CardMovement cardMovement = _battleManager.PlayerHandList[_selectedCardIndex1].GetComponent<CardMovement>();
             cardMovement.TargetTransform = _playerBattlestandbyPos;   
             cardMovement.gameObject.transform.DOScale(_growthFactor, _duration);
-            
-            _combatButtonObj.SetActive(false);
-            _cancelButtonObj1.SetActive(false);
 
             // make other cards disappear
             for (int i = 0; i < _battleManager.PlayerHandList.Count; i++)
@@ -492,9 +411,6 @@ public class PlayerTurnBattleState : BattleState
         {
             CardMovement cardMovement = _fusionCardView.GetComponent<CardMovement>();
             cardMovement.TargetTransform = _playerBattlestandbyPos;
-
-            _fuseButtonObj.SetActive(false);
-            _cancelButtonObj2.SetActive(false);
 
             // make other cards disappear
             for (int i = 0; i < _battleManager.PlayerHandList.Count; i++)
@@ -535,6 +451,9 @@ public class PlayerTurnBattleState : BattleState
             _battleManager.Discard.Add(card, DeckPosition.Top);
             _battleManager.PlayerHand.LazyRemove(_selectedCardIndex1);
         }
+
+        if (_selectedCardIndex2 == -2)
+            _selectedCardIndex2 = -1;
 
         if (_selectedCardIndex2 != -1)
         {

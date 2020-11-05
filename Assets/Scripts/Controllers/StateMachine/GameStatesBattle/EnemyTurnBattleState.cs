@@ -51,7 +51,7 @@ public class EnemyTurnBattleState : BattleState
 
         yield return new WaitForSeconds(pauseDuration);
 
-        StateMachine.ChangeState<PlayerTurnBattleState>();
+        StateMachine.ChangeState<PlayerDrawBattleState>();
     }
 
     // called by setup battle state

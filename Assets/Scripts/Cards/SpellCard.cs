@@ -20,7 +20,7 @@ public class SpellCard : Card
         SpriteBackground = Data.SpriteBackground;
         CardBackground = Data.CardBackground;
 
-        PlayEffect = Data.PlayEffect;
+        CardEffect = Data.PlayEffect;
     }
 
     public override void Play()
