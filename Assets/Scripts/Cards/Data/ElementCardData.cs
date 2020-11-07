@@ -21,11 +21,17 @@ public class ElementCardData : ScriptableObject
     [SerializeField] string _description = "";
     public string Description => _description;
 
-    [SerializeField] Sprite _sprite = null;
-    public Sprite Sprite => _sprite;
+    [SerializeField] Sprite _monsterSprite = null;
+    public Sprite MonsterSprite => _monsterSprite;
+
+    [SerializeField] Color _monsterColor;
+    public Color MonsterColor => _monsterColor;
 
     [SerializeField] Sprite _spriteBackground = null;
     public Sprite SpriteBackground => _spriteBackground;
+
+    [SerializeField] Color _monsterBackgroundColor;
+    public Color MonsterBackgroundColor => _monsterBackgroundColor;
 
     [SerializeField] Sprite _cardBackground = null;
     public Sprite CardBackground => _cardBackground;

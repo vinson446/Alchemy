@@ -160,7 +160,7 @@ public class FightBattleState : BattleState
         GameObject playerDamageObj = Instantiate(_damageTextObj, _spawnPlayerMessageObj.position, Quaternion.identity);
 
         ElementCardView cardView = _playerMonster.GetComponent<ElementCardView>();
-        playerDamageObj.GetComponent<DamagePopup>().SetupMessage("Activate " + cardView.Name + "\nPlay Effect", 1f);
+        //playerDamageObj.GetComponent<DamagePopup>().SetupMessage("Activate " + cardView.Name + "\nPlay Effect", 1f);
         playerDamageObj.transform.parent = _spawnPlayerMessageObj;
 
         cardView.PlayCardEffect();

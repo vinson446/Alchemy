@@ -20,9 +20,12 @@ public class ElementCardView : MonoBehaviour
     public int Defense;
     int _defenseBoost;
 
+    [SerializeField] TextMeshProUGUI _descriptionText;
+
     [SerializeField] Image _elementSprite;
     [SerializeField] Image _elementSpriteBackground;
-    [SerializeField] Image _elementCardBackground;
+
+    [SerializeField] Image _cardBackground;
 
     ElementCard _elementCard;
 
@@ -40,9 +43,14 @@ public class ElementCardView : MonoBehaviour
         Defense = card.Defense + _defenseBoost;
         _defenseText.text = Defense.ToString();
 
-        _elementSprite.sprite = card.Sprite;
+        _descriptionText.text = card.Description;
+
+        _elementSprite.sprite = card.MonsterSprite;
+        _elementSprite.color = card.MonsterColor;
         _elementSpriteBackground.sprite = card.SpriteBackground;
-        _elementCardBackground.sprite = card.CardBackground;
+        _elementSpriteBackground.color = card.MonsterBackgroundColor;
+
+        _cardBackground.sprite = card.CardBackground;
 
         _elementCard = card;
     }
@@ -51,10 +59,10 @@ public class ElementCardView : MonoBehaviour
     {
         GameManager gameManager = FindObjectOfType<GameManager>();
 
-        _attackBoost = (gameManager.LevelsUnlocked - 1) * 1000;
-        _defenseBoost = (gameManager.LevelsUnlocked - 1) * 1000;
+        _attackBoost = (gameManager.CurrentLevel) * 1000;
+        _defenseBoost = (gameManager.CurrentLevel) * 1000;
 
-        _levelBoost = (gameManager.LevelsUnlocked - 1);
+        _levelBoost = (gameManager.CurrentLevel);
     }
 
     public void StatChange(int atkChange, int defChange, int lvlChange)

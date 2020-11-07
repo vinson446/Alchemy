@@ -20,8 +20,11 @@ public class ElementCard : Card
         Attack = Data.Attack;
         Defense = Data.Defense;
 
-        Sprite = Data.Sprite;
+        MonsterSprite = Data.MonsterSprite;
+        MonsterColor = Data.MonsterColor;
         SpriteBackground = Data.SpriteBackground;
+        MonsterBackgroundColor = Data.MonsterBackgroundColor;
+
         CardBackground = Data.CardBackground;
 
         FusionCombinations = Data.FusionCombinations;

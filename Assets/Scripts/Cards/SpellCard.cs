@@ -16,9 +16,8 @@ public class SpellCard : Card
         AttackBuff = Data.AttackBuff;
         DefenseBuff = Data.DefenseBuff;
 
-        Sprite = Data.Sprite;
+        MonsterSprite = Data.Sprite;
         SpriteBackground = Data.SpriteBackground;
-        CardBackground = Data.CardBackground;
 
         CardEffect = Data.PlayEffect;
     }

@@ -29,8 +29,7 @@ public class SpellCardView : MonoBehaviour
         _attackText.text = spellCard.AttackBuff.ToString();
         _defenseText.text = spellCard.DefenseBuff.ToString();
 
-        _spellSprite.sprite = spellCard.Sprite;
+        _spellSprite.sprite = spellCard.MonsterSprite;
         _spellSpriteBackground.sprite = spellCard.SpriteBackground;
-        _spellCardBackground.sprite = spellCard.CardBackground;
     }
 }

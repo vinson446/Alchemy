@@ -81,6 +81,7 @@ public class ShowLevelSelectState : LevelSelectState
 
     void OnPressedBattle()
     {
+        gameManager.SelectLevel(_currentStageIndex);
         SceneManager.LoadScene("Battle");
     }
 

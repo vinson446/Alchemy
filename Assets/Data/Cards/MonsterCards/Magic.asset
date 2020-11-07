@@ -16,11 +16,12 @@ MonoBehaviour:
   _level: 1
   _attack: 800
   _defense: 400
-  _description: 
-  _sprite: {fileID: 21300000, guid: c4d7dc97ba74b084096617c8baffef40, type: 3}
-  _spriteBackground: {fileID: 0}
-  _cardBackground: {fileID: 0}
-  _playEffect: {fileID: 11400000, guid: f980ee1910259454a8dc6f68586f51c4, type: 2}
+  _description: Element Card
+  _monsterSprite: {fileID: 21300000, guid: c1ab8fa243373ce4b9d8ebe82dfaca52, type: 3}
+  _monsterColor: {r: 1, g: 0, b: 0.9745765, a: 1}
+  _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}
+  _monsterBackgroundColor: {r: 0.3207547, g: 0, b: 0.31407225, a: 1}
+  _cardBackground: {fileID: 21300000, guid: 5419a396e9e75f540b928c8fb99d1523, type: 3}
   _fusionCombinations:
   - {fileID: 11400000, guid: 107c8b0d2d5453c47ba0bba510d8ef1d, type: 2}
   - {fileID: 11400000, guid: fe009593b19011743b409f3354c3861b, type: 2}
@@ -29,3 +30,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b02fc036e321eb544a43893d1a828517, type: 2}
   - {fileID: 11400000, guid: 37a7aba7149707146b29d3b11ffd50fc, type: 2}
   - {fileID: 11400000, guid: 9ac07d08b643313489f1d3a0e57707d9, type: 2}
+  _cardEffect: {fileID: 0}

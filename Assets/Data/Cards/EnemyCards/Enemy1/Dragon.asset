@@ -17,9 +17,11 @@ MonoBehaviour:
   _attack: 700
   _defense: 700
   _description: 
-  _sprite: {fileID: 21300000, guid: 05d37e256c6f0c04b96eaea995d12181, type: 3}
-  _spriteBackground: {fileID: 0}
-  _cardBackground: {fileID: 0}
-  _playEffect: {fileID: 0}
+  _monsterSprite: {fileID: 21300000, guid: be5051cc596592d42bc9633cf8253ddc, type: 3}
+  _monsterColor: {r: 1, g: 0.13679248, b: 0.13679248, a: 1}
+  _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}
+  _monsterBackgroundColor: {r: 0.4056604, g: 0.05549129, b: 0.05549129, a: 1}
+  _cardBackground: {fileID: 21300000, guid: 5419a396e9e75f540b928c8fb99d1523, type: 3}
   _fusionCombinations: []
   _fusionMonsters: []
+  _cardEffect: {fileID: 0}
