@@ -18,10 +18,13 @@ MonoBehaviour:
   _defense: 200
   _description: 
   _monsterSprite: {fileID: 21300000, guid: 9614d9db5e0aeb143998a63021317573, type: 3}
-  _monsterColor: {r: 0, g: 1, b: 0.11066723, a: 1}
+  _monsterColor: {r: 0, g: 0.23584908, b: 0.026699904, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}
-  _monsterBackgroundColor: {r: 0, g: 0.4339623, b: 0.049352545, a: 1}
-  _cardBackground: {fileID: 21300000, guid: 5419a396e9e75f540b928c8fb99d1523, type: 3}
+  _monsterBackgroundColor: {r: 0, g: 1, b: 0.11711717, a: 1}
+  _cardBackground:
+  - {fileID: 21300000, guid: 5419a396e9e75f540b928c8fb99d1523, type: 3}
+  - {fileID: 21300000, guid: f1b58f1620c31a4478ddd8dd1b2dfe1f, type: 3}
+  - {fileID: 21300000, guid: 6b9b75a51f3af324b97930b4164cf113, type: 3}
   _fusionCombinations: []
   _fusionMonsters: []
   _cardEffect: {fileID: 0}

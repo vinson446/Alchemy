@@ -95,7 +95,7 @@ public class ShowLevelSelectState : LevelSelectState
 
     }
 
-    void RightArrow()
+    public void RightArrow()
     {
         if ((_currentStageIndex < _allLevels.Length - 1) && (_currentStageIndex < gameManager.LevelsUnlocked - 1))
         {
@@ -117,7 +117,7 @@ public class ShowLevelSelectState : LevelSelectState
         }
     }
 
-    void LeftArrow()
+    public void LeftArrow()
     {
         if ((_currentStageIndex > 0))
         {

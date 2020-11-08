@@ -26,7 +26,7 @@ public class SetupBattleState : BattleState
 
         SetupBattle();
 
-        StateMachine.Input.PressedGoToMenu += OnPressedMenu;
+        StateMachine.Input.PressedGoToLevelSelect += OnPressedLevelSelect;
     }
 
     // happens as a transition to player turn battle state
@@ -44,9 +44,9 @@ public class SetupBattleState : BattleState
         _activated = false;
     }
 
-    public void OnPressedMenu()
+    public void OnPressedLevelSelect()
     {
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("LevelSelect");
     }
 
     void SetupBattle()

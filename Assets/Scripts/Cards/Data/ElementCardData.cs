@@ -33,8 +33,8 @@ public class ElementCardData : ScriptableObject
     [SerializeField] Color _monsterBackgroundColor;
     public Color MonsterBackgroundColor => _monsterBackgroundColor;
 
-    [SerializeField] Sprite _cardBackground = null;
-    public Sprite CardBackground => _cardBackground;
+    [SerializeField] Sprite[] _cardBackground = null;
+    public Sprite[] CardBackground => _cardBackground;
 
     [SerializeField] ElementCardData[] _fusionCombinations = null;
     public ElementCardData[] FusionCombinations => _fusionCombinations;

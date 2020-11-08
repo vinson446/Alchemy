@@ -21,7 +21,10 @@ MonoBehaviour:
   _monsterColor: {r: 0, g: 0, b: 0, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}
   _monsterBackgroundColor: {r: 1, g: 1, b: 1, a: 1}
-  _cardBackground: {fileID: 21300000, guid: 5419a396e9e75f540b928c8fb99d1523, type: 3}
+  _cardBackground:
+  - {fileID: 21300000, guid: 5419a396e9e75f540b928c8fb99d1523, type: 3}
+  - {fileID: 21300000, guid: f1b58f1620c31a4478ddd8dd1b2dfe1f, type: 3}
+  - {fileID: 21300000, guid: 6b9b75a51f3af324b97930b4164cf113, type: 3}
   _fusionCombinations:
   - {fileID: 11400000, guid: 5606692aab4dca9488da6f9714d1f1f4, type: 2}
   - {fileID: 11400000, guid: 37bae8231a8e7564885ed068e4ea3cd2, type: 2}

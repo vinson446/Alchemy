@@ -11,6 +11,8 @@ public class ElementCard : Card
     public ElementCardData[] FusionCombinations { get; private set; }
     public ElementCardData[] FusionMonsters { get; private set; }
 
+    ElementCardData elementCardData;
+
     public ElementCard(ElementCardData Data)
     {
         // Card variables
@@ -25,12 +27,14 @@ public class ElementCard : Card
         SpriteBackground = Data.SpriteBackground;
         MonsterBackgroundColor = Data.MonsterBackgroundColor;
 
-        CardBackground = Data.CardBackground;
+        CardBackground = Data.CardBackground[0];
 
         FusionCombinations = Data.FusionCombinations;
         FusionMonsters = Data.FusionMonsters;
 
         CardEffect = Data.CardEffect;
+
+        elementCardData = Data;
     }
 
     public override void Play()
@@ -44,6 +48,13 @@ public class ElementCard : Card
         Defense += Level * 500;
 
         Level++;
+
+        if (Level >= 6)
+            CardBackground = elementCardData.CardBackground[2];
+        else if (Level >= 3)
+            CardBackground = elementCardData.CardBackground[1];
+        else
+            CardBackground = elementCardData.CardBackground[0];
     }
 
     public void RevertUpgrade()
@@ -52,6 +63,13 @@ public class ElementCard : Card
         Defense /= 2;
 
         Level--;
+
+        if (Level >= 6)
+            CardBackground = elementCardData.CardBackground[2];
+        else if (Level >= 3)
+            CardBackground = elementCardData.CardBackground[1];
+        else
+            CardBackground = elementCardData.CardBackground[0];
     }
 
     public void SetFusionMonsterStats(int attack1, int attack2, int defense1, int defense2, int level1, int level2)
