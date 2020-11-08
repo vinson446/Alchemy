@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public int LevelsUnlocked => _levelsUnlocked;
 
     [SerializeField] int _currentLevel = 1;
-    public int CurrentLevel => _currentLevel;
+    public int CurrentLevel { get => _currentLevel; set => _currentLevel = value; }
 
     [SerializeField] int _gold = 100;
     public int Gold { get => _gold; set => _gold = value; }

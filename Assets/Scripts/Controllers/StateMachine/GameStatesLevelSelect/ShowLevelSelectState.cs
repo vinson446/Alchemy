@@ -9,6 +9,7 @@ using DG.Tweening;
 public class ShowLevelSelectState : LevelSelectState
 {
     [SerializeField] GameObject[] _allPanels;
+    [SerializeField] Transform[] thumbNails;
     [SerializeField] GameObject _levelSelectPanel;
 
     [SerializeField] GameObject[] _allLevels;
@@ -23,13 +24,20 @@ public class ShowLevelSelectState : LevelSelectState
 
     private void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
-        UnlockLevels();
+
     }
 
     public override void Enter()
     {
+        gameManager = FindObjectOfType<GameManager>();
+        UnlockLevels();
+
         _levelSelectPanel.SetActive(true);
+
+        if (gameManager.CurrentLevel == 0)
+            DisableLeftArrow();
+        else if (gameManager.CurrentLevel == 8)
+            DisableRightArrow();
 
         // StateMachine.Input.PressedViewLab += OnPressedLab;
         StateMachine.Input.PressedViewDeck += OnPressedDeck;
@@ -43,6 +51,7 @@ public class ShowLevelSelectState : LevelSelectState
 
     public override void Tick()
     {
+        /*
         for (int i = 0; i < _allLevels.Length; i++)
         {
             if (i < gameManager.LevelsUnlocked)
@@ -50,6 +59,7 @@ public class ShowLevelSelectState : LevelSelectState
             else
                 _allLevels[i].GetComponent<Button>().interactable = false;
         }
+        */
     }
 
     public override void Exit()
@@ -97,16 +107,22 @@ public class ShowLevelSelectState : LevelSelectState
 
     public void RightArrow()
     {
-        if ((_currentStageIndex < _allLevels.Length - 1) && (_currentStageIndex < gameManager.LevelsUnlocked - 1))
+        _sideButtons[1].gameObject.SetActive(true);
+
+        if ((_currentStageIndex < _allLevels.Length - 1) && (_currentStageIndex < gameManager.LevelsUnlocked))
         {
             _previousStageIndex = _currentStageIndex;
             _currentStageIndex += 1;
 
+            // move panels
             for (int i = _allLevels.Length - 1; i > 0; i--)
             {
                 _allLevels[i].transform.DOMoveX(_allLevels[i - 1].transform.position.x, 0.25f, true);
+                _allLevels[i - 1].GetComponent<Button>().interactable = false;
             }
             _allLevels[0].transform.DOMoveX(_allLevels[0].transform.position.x - 750, 0.25f, true);
+
+            _allLevels[_currentStageIndex].GetComponent<Button>().interactable = true;
 
             MinimizePreviousLevel();
             EnlargeCurrentLevel();
@@ -115,11 +131,22 @@ public class ShowLevelSelectState : LevelSelectState
 
             UpdateLevelStageText();
         }
+        if (_currentStageIndex == 8)
+        {
+            DisableRightArrow();
+        }
+    }
+
+    public void DisableRightArrow()
+    {
+        _sideButtons[0].gameObject.SetActive(false);
     }
 
     public void LeftArrow()
     {
-        if ((_currentStageIndex > 0))
+        _sideButtons[0].gameObject.SetActive(true);
+
+        if (_currentStageIndex > 0)
         {
             _previousStageIndex = _currentStageIndex;
             _currentStageIndex -= 1;
@@ -127,8 +154,11 @@ public class ShowLevelSelectState : LevelSelectState
             for (int i = 0; i < _allLevels.Length - 1; i++)
             {
                 _allLevels[i].transform.DOMoveX(_allLevels[i + 1].transform.position.x, 0.25f, true);
+                _allLevels[i + 1].GetComponent<Button>().interactable = false;
             }
             _allLevels[_allLevels.Length - 1].transform.DOMoveX(_allLevels[_allLevels.Length - 1].transform.position.x + 750, 0.25f, true);
+
+            _allLevels[_currentStageIndex].GetComponent<Button>().interactable = true;
 
             MinimizePreviousLevel();
             EnlargeCurrentLevel();
@@ -137,18 +167,31 @@ public class ShowLevelSelectState : LevelSelectState
 
             UpdateLevelStageText();
         }
+        if (_currentStageIndex == 0)
+        {
+            DisableLeftArrow();
+        }
+    }
+
+    public void DisableLeftArrow()
+    {
+        _sideButtons[1].gameObject.SetActive(false);
     }
 
     void MinimizePreviousLevel()
     {
         _allLevels[_previousStageIndex].transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 400);
         _allLevels[_previousStageIndex].transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 600);
+        _allLevels[_previousStageIndex].transform.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 300);
+        _allLevels[_previousStageIndex].transform.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
     }
 
     void EnlargeCurrentLevel()
     {
         _allLevels[_currentStageIndex].transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 600);
         _allLevels[_currentStageIndex].transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 800);
+        _allLevels[_currentStageIndex].transform.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 500);
+        _allLevels[_currentStageIndex].transform.GetChild(0).GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 500);
     }
 
     IEnumerator DisableRightLeft()

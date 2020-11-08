@@ -3024,8 +3024,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2211d6c56ec2aaf4fb2241e8a8df7c31, type: 2}
   - {fileID: 11400000, guid: 7157434dd935b20479e0121e69e4caaf, type: 2}
   - {fileID: 11400000, guid: 37bae8231a8e7564885ed068e4ea3cd2, type: 2}
-  _levelsUnlocked: 1
-  _currentLevel: 1
+  _levelsUnlocked: 0
+  _currentLevel: 0
   _gold: 1000
 --- !u!4 &274899173
 Transform:
