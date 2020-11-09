@@ -67,8 +67,28 @@ public class BattleManager : MonoBehaviour
     {
         _gameManager = FindObjectOfType<GameManager>();
 
+        SetupPlayerHP();
         SetupEnemyHP();
         UpdateBothHP(0, 0);    
+    }
+
+    void SetupPlayerHP()
+    {
+        if (_gameManager.CurrentLevel >= 6)
+        {
+            _playerHP = 12000;
+            _playerHPText.text = _playerHP.ToString();
+        }
+        else if (_gameManager.CurrentLevel >= 3)
+        {
+            _playerHP = 8000;
+            _playerHPText.text = _playerHP.ToString();
+        }
+        else
+        {
+            _playerHP = 4000;
+            _playerHPText.text = _playerHP.ToString();
+        }
     }
 
     public void SetupEnemyHP()
@@ -110,7 +130,7 @@ public class BattleManager : MonoBehaviour
         winLosePanel.SetActive(true);
         winLoseText.text = "Victory!";
 
-        goldReward = 100;
+        goldReward = _gameManager.CurrentLevel * 200 + 100;
         rewardText.text = "+" + goldReward.ToString() + " Gold";
 
         _gameManager.IncrementGold(goldReward);

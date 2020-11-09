@@ -12,6 +12,7 @@ public class ElementCard : Card
     public ElementCardData[] FusionMonsters { get; private set; }
 
     ElementCardData elementCardData;
+    public ElementCardData ElementCardData { get => elementCardData; set => elementCardData = value; }
 
     public ElementCard(ElementCardData Data)
     {
@@ -50,11 +51,17 @@ public class ElementCard : Card
         Level++;
 
         if (Level >= 6)
+        {
             CardBackground = elementCardData.CardBackground[2];
+        }
         else if (Level >= 3)
+        {
             CardBackground = elementCardData.CardBackground[1];
+        }
         else
+        {
             CardBackground = elementCardData.CardBackground[0];
+        }
     }
 
     public void RevertUpgrade()
@@ -65,11 +72,17 @@ public class ElementCard : Card
         Level--;
 
         if (Level >= 6)
+        {
             CardBackground = elementCardData.CardBackground[2];
+        }
         else if (Level >= 3)
+        {
             CardBackground = elementCardData.CardBackground[1];
+        }
         else
+        {
             CardBackground = elementCardData.CardBackground[0];
+        }
     }
 
     public void SetFusionMonsterStats(int attack1, int attack2, int defense1, int defense2, int level1, int level2)

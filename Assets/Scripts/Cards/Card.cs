@@ -17,7 +17,7 @@ public abstract class Card
     public Sprite SpriteBackground { get; protected set; }
     public Color MonsterBackgroundColor { get; protected set; }
 
-    public Sprite CardBackground { get; protected set; }
+    public Sprite CardBackground;
 
     public CardPlayEffect CardEffect { get; protected set; }
 

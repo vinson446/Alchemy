@@ -304,7 +304,7 @@ public class PlayerTurnBattleState : BattleState
 
             foreach (Image image in cardImages)
             {
-                image.CrossFadeAlpha(0.33f, 0.2f, true);
+                image.CrossFadeAlpha(0.5f, 0.2f, true);
             }
 
             /*

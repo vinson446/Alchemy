@@ -6603,7 +6603,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6b9b75a51f3af324b97930b4164cf113,
+      objectReference: {fileID: 21300000, guid: 5419a396e9e75f540b928c8fb99d1523,
         type: 3}
     - target: {fileID: 7409477650175005279, guid: 79910dfd04af4a94588ebb5b242b71c1,
         type: 3}
@@ -9062,7 +9062,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 37bae8231a8e7564885ed068e4ea3cd2, type: 2}
   - {fileID: 11400000, guid: 37bae8231a8e7564885ed068e4ea3cd2, type: 2}
   - {fileID: 11400000, guid: 37bae8231a8e7564885ed068e4ea3cd2, type: 2}
-  _levelsUnlocked: 8
+  _levelsUnlocked: 4
   _currentLevel: 0
   _gold: 1000
 --- !u!4 &718016742
@@ -12231,7 +12231,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: f1b58f1620c31a4478ddd8dd1b2dfe1f,
+      objectReference: {fileID: 21300000, guid: 5419a396e9e75f540b928c8fb99d1523,
         type: 3}
     - target: {fileID: 7409477650175005279, guid: 79910dfd04af4a94588ebb5b242b71c1,
         type: 3}
@@ -12726,7 +12726,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1369371898
 RectTransform:
   m_ObjectHideFlags: 0

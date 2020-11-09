@@ -11,6 +11,8 @@ public class SetupBattleState : BattleState
 
     [SerializeField] Image backgroundImage;
     [SerializeField] Sprite[] battleSceneryImages;
+    [SerializeField] Image[] uiImages;
+    [SerializeField] Color[] uiColors;
 
     bool _activated = false;
 
@@ -106,14 +108,20 @@ public class SetupBattleState : BattleState
         if (_gameManager.CurrentLevel >= 6)
         {
             backgroundImage.sprite = battleSceneryImages[2];
+            uiImages[0].color = uiColors[2];
+            uiImages[1].color = uiColors[2];
         }
         else if (_gameManager.CurrentLevel >= 3)
         {
             backgroundImage.sprite = battleSceneryImages[1];
+            uiImages[0].color = uiColors[1];
+            uiImages[1].color = uiColors[1];
         }
         else if (_gameManager.CurrentLevel >= 0)
         {
             backgroundImage.sprite = battleSceneryImages[0];
+            uiImages[0].color = uiColors[0];
+            uiImages[1].color = uiColors[0];
         }
     }
 }

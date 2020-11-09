@@ -14,7 +14,9 @@ public class EnemyTurnBattleState : BattleState
 
     [Header("References")]
     [SerializeField] List<GameObject> _deckList;
-    [SerializeField] ElementCardData[] _deckConfig;
+    [SerializeField] ElementCardData[] _deckConfig1;
+    [SerializeField] ElementCardData[] _deckConfig2;
+    [SerializeField] ElementCardData[] _deckConfig3;
     [SerializeField] Transform _initalPos;
     [SerializeField] Transform _battlePosStandby;
     Deck<Card> _deck = new Deck<Card>();
@@ -29,6 +31,8 @@ public class EnemyTurnBattleState : BattleState
     int _prevMonsterIndex;
     GameObject _selectedMonster;
     public GameObject SelectedMonster => _selectedMonster;
+
+    GameManager gameManager;
 
     public override void Enter()
     {
@@ -57,16 +61,45 @@ public class EnemyTurnBattleState : BattleState
     // called by setup battle state
     public void CreateEnemyDeck()
     {
-        for (int i = 0; i < _deckConfig.Length; i++)
-        {
-            ElementCard elementCard = new ElementCard(_deckConfig[i]);
-            _deck.Add(elementCard);
+        gameManager = FindObjectOfType<GameManager>();
 
-            ElementCardView cardView = _deckList[i].GetComponent<ElementCardView>();
-            if (cardView != null)
+        for (int i = 0; i < _deckConfig1.Length; i++)
+        {
+            if (gameManager.CurrentLevel >= 6)
             {
-                cardView.EnemyBattleUpgrade();
-                cardView.Display(elementCard);
+                ElementCard elementCard = new ElementCard(_deckConfig3[i]);
+                _deck.Add(elementCard);
+
+                ElementCardView cardView = _deckList[i].GetComponent<ElementCardView>();
+                if (cardView != null)
+                {
+                    cardView.EnemyBattleUpgrade();
+                    cardView.Display(elementCard);
+                }
+            }
+            else if (gameManager.CurrentLevel >= 3)
+            {
+                ElementCard elementCard = new ElementCard(_deckConfig2[i]);
+                _deck.Add(elementCard);
+
+                ElementCardView cardView = _deckList[i].GetComponent<ElementCardView>();
+                if (cardView != null)
+                {
+                    cardView.EnemyBattleUpgrade();
+                    cardView.Display(elementCard);
+                }
+            }
+            else
+            {
+                ElementCard elementCard = new ElementCard(_deckConfig1[i]);
+                _deck.Add(elementCard);
+
+                ElementCardView cardView = _deckList[i].GetComponent<ElementCardView>();
+                if (cardView != null)
+                {
+                    cardView.EnemyBattleUpgrade();
+                    cardView.Display(elementCard);
+                }
             }
         }
     }

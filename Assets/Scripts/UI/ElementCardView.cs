@@ -26,8 +26,16 @@ public class ElementCardView : MonoBehaviour
     [SerializeField] Image _elementSpriteBackground;
 
     [SerializeField] Image _cardBackground;
+    [SerializeField] Sprite[] cardBordersForEnemies;
 
     ElementCard _elementCard;
+
+    GameManager gameManager;
+
+    private void Awake()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+    }
 
     public void Display(ElementCard card)
     {
@@ -50,19 +58,29 @@ public class ElementCardView : MonoBehaviour
         _elementSpriteBackground.sprite = card.SpriteBackground;
         _elementSpriteBackground.color = card.MonsterBackgroundColor;
 
-        _cardBackground.sprite = card.CardBackground;
-
         _elementCard = card;
     }
 
     public void EnemyBattleUpgrade()
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-
         _attackBoost = (gameManager.CurrentLevel) * 1000;
         _defenseBoost = (gameManager.CurrentLevel) * 1000;
 
         _levelBoost = (gameManager.CurrentLevel);
+
+        // set card background color
+        if (gameManager.CurrentLevel >= 6)
+        {
+            _cardBackground.sprite = cardBordersForEnemies[2];
+        }
+        else if (gameManager.CurrentLevel >= 3)
+        {
+            _cardBackground.sprite = cardBordersForEnemies[1];
+        }
+        else
+        {
+            _cardBackground.sprite = cardBordersForEnemies[0];
+        }
     }
 
     public void StatChange(int atkChange, int defChange, int lvlChange)

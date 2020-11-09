@@ -17,14 +17,12 @@ public class Forge : CardPlayEffect
         _fightBattleState = FindObjectOfType<FightBattleState>();
         _battleManager = FindObjectOfType<BattleManager>();
 
-        // use higher stat out of atk and def / 2 to heal player
+        pDamage = _battleManager.PlayerHP / 2;
+
         ElementCardView cardView = _fightBattleState._playerMonster.GetComponent<ElementCardView>();
-        int defBoost = cardView.Defense * 2;
+        int defBoost = cardView.Defense + pDamage;
 
         cardView.StatChange(0, defBoost, cardView.Level);
-
-        // deal half of player monster's attack as direct damage
-        pDamage = _battleManager.PlayerHP / 2;
 
         bool continueGame = _battleManager.UpdateBothHP(-pDamage, 0);
         _fightBattleState.ShowDamagePopup(-pDamage, 0);
