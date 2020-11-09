@@ -29,8 +29,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 107c8b0d2d5453c47ba0bba510d8ef1d, type: 2}
   - {fileID: 11400000, guid: fe009593b19011743b409f3354c3861b, type: 2}
   - {fileID: 11400000, guid: fd5072f3c1e994945ab6cda4ebce2253, type: 2}
+  - {fileID: 11400000, guid: 7157434dd935b20479e0121e69e4caaf, type: 2}
   _fusionMonsters:
   - {fileID: 11400000, guid: b02fc036e321eb544a43893d1a828517, type: 2}
   - {fileID: 11400000, guid: 37a7aba7149707146b29d3b11ffd50fc, type: 2}
   - {fileID: 11400000, guid: 9ac07d08b643313489f1d3a0e57707d9, type: 2}
+  - {fileID: 11400000, guid: 72d7a91cfdde15b4d8dbf1eff6417881, type: 2}
   _cardEffect: {fileID: 0}

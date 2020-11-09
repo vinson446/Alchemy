@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SetupBattleState : BattleState
 {
     [SerializeField] BattleManager _battleManager;
     GameManager _gameManager;
+
+    [SerializeField] Image backgroundImage;
+    [SerializeField] Sprite[] battleSceneryImages;
 
     bool _activated = false;
 
@@ -25,6 +29,7 @@ public class SetupBattleState : BattleState
         _enemyTurnBattleState.ShuffleEnemyDeck();
 
         SetupBattle();
+        SetupBattleScenery();
 
         StateMachine.Input.PressedGoToLevelSelect += OnPressedLevelSelect;
     }
@@ -81,9 +86,6 @@ public class SetupBattleState : BattleState
 
     void ShuffleDeck()
     {
-        // front end
-        // TODO- cool shuffle animation
-
         // back end
         _battleManager.BattleDeck.Shuffle(_battleManager.DeckList);
     }
@@ -96,6 +98,22 @@ public class SetupBattleState : BattleState
             ElementCardView c = _battleManager.DeckList[i].GetComponent<ElementCardView>();
             ElementCard newCard = (ElementCard)_battleManager.BattleDeck.GetCard(i);
             c.Display(newCard);
+        }
+    }
+
+    void SetupBattleScenery()
+    {
+        if (_gameManager.CurrentLevel >= 6)
+        {
+            backgroundImage.sprite = battleSceneryImages[2];
+        }
+        else if (_gameManager.CurrentLevel >= 3)
+        {
+            backgroundImage.sprite = battleSceneryImages[1];
+        }
+        else if (_gameManager.CurrentLevel >= 0)
+        {
+            backgroundImage.sprite = battleSceneryImages[0];
         }
     }
 }

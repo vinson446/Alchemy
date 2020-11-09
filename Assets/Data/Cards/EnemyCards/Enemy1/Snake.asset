@@ -16,7 +16,7 @@ MonoBehaviour:
   _level: 1
   _attack: 600
   _defense: 200
-  _description: 
+  _description: PAPI
   _monsterSprite: {fileID: 21300000, guid: 9614d9db5e0aeb143998a63021317573, type: 3}
   _monsterColor: {r: 0, g: 0.23584908, b: 0.026699904, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}

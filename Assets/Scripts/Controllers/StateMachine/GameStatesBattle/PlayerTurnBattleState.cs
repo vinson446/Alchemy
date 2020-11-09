@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerTurnBattleState : BattleState
 {
@@ -30,6 +31,9 @@ public class PlayerTurnBattleState : BattleState
     [SerializeField] float _shrinkFactor;
     [SerializeField] float _growthFactor;
     [SerializeField] float _duration;
+
+    [Header("Visual Settings")]
+
 
     bool _selectingFirstCard = true;
     bool _selectingSecondCard = false;
@@ -163,6 +167,12 @@ public class PlayerTurnBattleState : BattleState
 
     void ResetBackEnd()
     {
+        if (_selectedCardIndex1 >= 0)
+        {
+            FadeFusionCardForFusionCombination(false);
+            ShowFusionMonster(false);
+        }
+
         // reset backend variables
         _selectingFirstCard = true;
         _selectingSecondCard = false;
@@ -261,6 +271,89 @@ public class PlayerTurnBattleState : BattleState
                 Image glowImage = glowImageObj.transform.GetChild(0).gameObject.GetComponent<Image>();
                 glowImage.enabled = false;
             }
+
+            FadeFusionCardForFusionCombination(true);
+        }
+    }
+
+    void FadeFusionCardForFusionCombination(bool up)
+    {
+        if (up)
+        {
+            /*
+            GameObject card1 = _battleManager.PlayerHandList[_selectedCardIndex1];
+            Image[] card1Images = card1.GetComponentsInChildren<Image>();
+
+            foreach (Image image in card1Images)
+            {
+                image.DOFade(0.5f, 0.2f);
+            }
+
+            GameObject card2 = _battleManager.PlayerHandList[_selectedCardIndex2];
+            Image[] card2Images = card2.GetComponentsInChildren<Image>();
+
+            foreach (Image image in card2Images)
+            {
+                image.DOFade(0.5f, 0.2f);
+            }
+            */
+
+            GameObject fusionCard = _fusionCardView.gameObject;
+            Image[] cardImages = fusionCard.GetComponentsInChildren<Image>();
+            // TextMeshProUGUI[] texts = fusionCard.GetComponentsInChildren<TextMeshProUGUI>();
+
+            foreach (Image image in cardImages)
+            {
+                image.CrossFadeAlpha(0.33f, 0.2f, true);
+            }
+
+            /*
+            foreach (TextMeshProUGUI text in texts)
+            {
+                text.CrossFadeAlpha(0.33f, 0.2f, true);
+            }
+            */
+        }
+        else
+        {
+            /*
+            if (_selectedCardIndex1 != -1)
+            {
+                GameObject card1 = _battleManager.PlayerHandList[_selectedCardIndex1];
+                Image[] card1Images = card1.GetComponentsInChildren<Image>();
+
+                foreach (Image image in card1Images)
+                {
+                    image.DOFade(1f, 0.2f);
+                }
+            }
+
+            if (_selectedCardIndex2 != -1)
+            {
+                GameObject card2 = _battleManager.PlayerHandList[_selectedCardIndex2];
+                Image[] card2Images = card2.GetComponentsInChildren<Image>();
+
+                foreach (Image image in card2Images)
+                {
+                    image.DOFade(1f, 0.2f);
+                }
+            }
+            */
+            GameObject fusionCard = _fusionCardView.gameObject;
+            Image[] cardImages = fusionCard.GetComponentsInChildren<Image>();
+            // TextMeshProUGUI[] texts = fusionCard.GetComponentsInChildren<TextMeshProUGUI>();
+
+            foreach (Image image in cardImages)
+            {
+                image.CrossFadeAlpha(1f, 0f, true);
+            }
+
+            /*
+            foreach (TextMeshProUGUI text in texts)
+            {
+                text.CrossFadeAlpha(1, 0, true);
+            }
+            */
         }
     }
 
@@ -320,6 +413,8 @@ public class PlayerTurnBattleState : BattleState
         _cancelButtonObj1.SetActive(false);
         _fuseButtonObj.SetActive(true);
         _cancelButtonObj2.SetActive(true);
+
+       ShowFusionMonster(true);
     }
 
     public void StartFusionCoroutine()
@@ -338,11 +433,13 @@ public class PlayerTurnBattleState : BattleState
         Sequence fusionSequence1 = DOTween.Sequence();
         Sequence fusionSequence2 = DOTween.Sequence();
 
+        // move out
         fusionSequence1.Append(_battleManager.PlayerPlayingCardPositions[0].transform.DOLocalMoveX
             (_battleManager.PlayerPlayingCardPositions[2].transform.localPosition.x, _durationMoveOut));
         fusionSequence2.Append(_battleManager.PlayerPlayingCardPositions[1].transform.DOLocalMoveX
             (_battleManager.PlayerPlayingCardPositions[3].transform.localPosition.x, _durationMoveOut));
 
+        // move in
         fusionSequence1.Append(_battleManager.PlayerPlayingCardPositions[0].transform.DOLocalMoveX
             (_battleManager.PlayerPlayingCardPositions[6].transform.localPosition.x, _durationMoveIn));
         fusionSequence2.Append(_battleManager.PlayerPlayingCardPositions[1].transform.DOLocalMoveX
@@ -353,24 +450,38 @@ public class PlayerTurnBattleState : BattleState
 
         yield return new WaitForSeconds(_durationMoveOut + _durationMoveIn);
 
+        FadeFusionCardForFusionCombination(false);
+
+        yield return new WaitForSeconds(0.5f);
+
         // hide selected cards
         _battleManager.PlayerHandList[_selectedCardIndex1].SetActive(false);
         _battleManager.PlayerHandList[_selectedCardIndex2].SetActive(false);
 
-        // show fusion monster
-        ElementCard firstCard = (ElementCard)_battleManager.PlayerHand.GetCard(_selectedCardIndex1);
-        ElementCard currentCard = (ElementCard)_battleManager.PlayerHand.GetCard(_selectedCardIndex2);
-        ElementCard fusionCard = new ElementCard(currentCard.FusionMonsters[_fusionCombinationIndexes[_selectedCardIndex2]]);
-
-        fusionCard.SetFusionMonsterStats(firstCard.Attack, currentCard.Attack, firstCard.Defense, currentCard.Defense, firstCard.Level, currentCard.Level);
-
-        _fusionCardView.Display(fusionCard);
-        _fusionCardView.gameObject.SetActive(true);
-
+        // reset positioning
         _battleManager.PlayerPlayingCardPositions[0].transform.position = _battleManager.PlayerPlayingCardPositions[4].transform.position;
         _battleManager.PlayerPlayingCardPositions[1].transform.position = _battleManager.PlayerPlayingCardPositions[5].transform.position;
 
         StartMoveCardToBattlePosCoroutine();
+    }
+
+    void ShowFusionMonster(bool show)
+    {
+        if (show)
+        {
+            ElementCard firstCard = (ElementCard)_battleManager.PlayerHand.GetCard(_selectedCardIndex1);
+            ElementCard currentCard = (ElementCard)_battleManager.PlayerHand.GetCard(_selectedCardIndex2);
+            ElementCard fusionCard = new ElementCard(currentCard.FusionMonsters[_fusionCombinationIndexes[_selectedCardIndex2]]);
+
+            fusionCard.SetFusionMonsterStats(firstCard.Attack, currentCard.Attack, firstCard.Defense, currentCard.Defense, firstCard.Level, currentCard.Level);
+
+            _fusionCardView.Display(fusionCard);
+            _fusionCardView.gameObject.SetActive(true);
+        }
+        else
+        {
+            _fusionCardView.gameObject.SetActive(false);
+        }
     }
 
     public void StartMoveCardToBattlePosCoroutine()
@@ -502,5 +613,11 @@ public class PlayerTurnBattleState : BattleState
                 _battleManager.PlayerHandList[i].transform.DOScale(_normFactor, _duration);
             }
         }
+    }
+
+    public void ResetFusionMonsterPositioning()
+    {
+        _fusionCardView.gameObject.transform.localPosition = Vector3.zero;
+        _fusionCardView.gameObject.GetComponent<CardMovement>().TargetTransform = null;
     }
 }

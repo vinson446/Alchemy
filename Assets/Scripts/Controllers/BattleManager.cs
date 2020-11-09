@@ -73,7 +73,7 @@ public class BattleManager : MonoBehaviour
 
     public void SetupEnemyHP()
     {
-        _enemyHP = 1500 + (_gameManager.LevelsUnlocked) * 500;
+        _enemyHP = 4000 + (_gameManager.CurrentLevel) * 2000;
         _enemyHPText.text = _enemyHP.ToString();
     }
 

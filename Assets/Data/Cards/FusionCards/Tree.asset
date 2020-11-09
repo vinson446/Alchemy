@@ -16,7 +16,7 @@ MonoBehaviour:
   _level: 1
   _attack: 0
   _defense: 0
-  _description: 
+  _description: 'Fusion Card: Recover Hp based on half this card''s highest stat'
   _monsterSprite: {fileID: 21300000, guid: d3008ce89fa9b5a41a181f64e8bcc089, type: 3}
   _monsterColor: {r: 0, g: 0.990566, b: 0.05734853, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}

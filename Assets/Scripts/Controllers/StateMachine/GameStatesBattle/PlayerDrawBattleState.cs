@@ -18,6 +18,7 @@ public class PlayerDrawBattleState : BattleState
     public override void Enter()
     {
         Draw();
+        playerTurnBattleState.ResetFusionMonsterPositioning();
     }
 
     public override void Tick()
@@ -104,7 +105,6 @@ public class PlayerDrawBattleState : BattleState
     void ShuffleDeck()
     {
         // front end
-        // TODO- cool shuffle animation
         StartCoroutine(MoveCardsInDiscardToDeck());
     }
 

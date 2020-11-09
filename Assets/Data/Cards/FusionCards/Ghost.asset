@@ -16,7 +16,7 @@ MonoBehaviour:
   _level: 1
   _attack: 0
   _defense: 0
-  _description: 
+  _description: 'Fusion Card: Skip this battle phase'
   _monsterSprite: {fileID: 21300000, guid: 9ef1a6cd7c71f774993c980b99b00e71, type: 3}
   _monsterColor: {r: 1, g: 1, b: 1, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}

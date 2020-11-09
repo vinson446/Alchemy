@@ -16,8 +16,8 @@ MonoBehaviour:
   _level: 1
   _attack: 0
   _defense: 0
-  _description: 
-  _monsterSprite: {fileID: 21300000, guid: 444f89c185d81aa4bafcc22238b95f9b, type: 3}
+  _description: 'Fusion Card: Deal half of this card''s Atk as direct damage'
+  _monsterSprite: {fileID: 21300000, guid: 40486783bf94fb6469474a62c702ffd8, type: 3}
   _monsterColor: {r: 1, g: 0, b: 0, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}
   _monsterBackgroundColor: {r: 0.4811321, g: 0, b: 0, a: 1}

@@ -18,9 +18,9 @@ MonoBehaviour:
   _defense: 700
   _description: Element Card
   _monsterSprite: {fileID: 21300000, guid: 9bbb926faf7463f4db22750769ace3f0, type: 3}
-  _monsterColor: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 1}
+  _monsterColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}
-  _monsterBackgroundColor: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
+  _monsterBackgroundColor: {r: 0.33962262, g: 0, b: 0, a: 1}
   _cardBackground:
   - {fileID: 21300000, guid: 5419a396e9e75f540b928c8fb99d1523, type: 3}
   - {fileID: 21300000, guid: f1b58f1620c31a4478ddd8dd1b2dfe1f, type: 3}
