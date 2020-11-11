@@ -18,7 +18,7 @@ MonoBehaviour:
   _defense: 1000
   _description: Space Card
   _monsterSprite: {fileID: 21300000, guid: 180f5c3e9001d09458811c72e65042a5, type: 3}
-  _monsterColor: {r: 0.9339623, g: 0.54322296, b: 0, a: 1}
+  _monsterColor: {r: 1, g: 0.58992, b: 0.0141509175, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}
   _monsterBackgroundColor: {r: 0.20754719, g: 0.117021285, b: 0, a: 1}
   _cardBackground:

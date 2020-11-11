@@ -22,6 +22,7 @@ public class BattleManager : MonoBehaviour
     [Header("References")]
     [SerializeField] GameObject winLosePanel;
     [SerializeField] TextMeshProUGUI winLoseText;
+    [SerializeField] GameObject goldImage;
     [SerializeField] TextMeshProUGUI rewardText;
     [SerializeField] int goldReward;
 
@@ -131,6 +132,7 @@ public class BattleManager : MonoBehaviour
         winLoseText.text = "Victory!";
 
         goldReward = _gameManager.CurrentLevel * 200 + 100;
+        goldImage.SetActive(true);
         rewardText.text = "+" + goldReward.ToString() + " Gold";
 
         _gameManager.IncrementGold(goldReward);

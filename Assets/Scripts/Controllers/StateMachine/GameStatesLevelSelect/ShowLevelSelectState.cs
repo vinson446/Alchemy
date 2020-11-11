@@ -17,8 +17,8 @@ public class ShowLevelSelectState : LevelSelectState
     [SerializeField] TextMeshProUGUI _levelText;
     [SerializeField] TextMeshProUGUI _stageText;
 
-    int _currentStageIndex;
-    int _previousStageIndex;
+    public int _currentStageIndex;
+    public int _previousStageIndex;
 
     GameManager gameManager;
 
@@ -30,14 +30,16 @@ public class ShowLevelSelectState : LevelSelectState
     public override void Enter()
     {
         gameManager = FindObjectOfType<GameManager>();
-        UnlockLevels();
+        GoToCurrentLevel();
 
         _levelSelectPanel.SetActive(true);
 
+        /*
         if (gameManager.CurrentLevel == 0)
             DisableLeftArrow();
         else if (gameManager.CurrentLevel == 8)
             DisableRightArrow();
+        */
 
         // StateMachine.Input.PressedViewLab += OnPressedLab;
         StateMachine.Input.PressedViewDeck += OnPressedDeck;
@@ -45,8 +47,8 @@ public class ShowLevelSelectState : LevelSelectState
         StateMachine.Input.PressedGoToMenu += OnPressedMenu;
         StateMachine.Input.PressedGoToBattle += OnPressedBattle;
 
-        StateMachine.Input.PressedRight += RightArrow;
-        StateMachine.Input.PressedLeft += LeftArrow;
+        // StateMachine.Input.PressedRight += RightArrow;
+        // StateMachine.Input.PressedLeft += LeftArrow;
     }
 
     public override void Tick()
@@ -75,8 +77,8 @@ public class ShowLevelSelectState : LevelSelectState
         StateMachine.Input.PressedGoToMenu -= OnPressedMenu;
         StateMachine.Input.PressedGoToBattle -= OnPressedBattle;
 
-        StateMachine.Input.PressedRight -= RightArrow;
-        StateMachine.Input.PressedLeft -= LeftArrow;
+        // StateMachine.Input.PressedRight -= RightArrow;
+        // StateMachine.Input.PressedLeft -= LeftArrow;
     }
 
     void OnPressedLab()
@@ -100,27 +102,37 @@ public class ShowLevelSelectState : LevelSelectState
         SceneManager.LoadScene("Menu");
     }
 
-    void UnlockLevels()
+    void GoToCurrentLevel()
     {
-
+        for (int i = 0; i < gameManager.CurrentLevel; i++)
+        {
+            RightArrow(false);
+        }
     }
 
-    public void RightArrow()
+    public void RightArrow(bool click)
     {
-        _sideButtons[1].gameObject.SetActive(true);
-
         if ((_currentStageIndex < _allLevels.Length - 1) && (_currentStageIndex < gameManager.LevelsUnlocked))
         {
+            // _sideButtons[1].gameObject.SetActive(true);
+
             _previousStageIndex = _currentStageIndex;
             _currentStageIndex += 1;
 
             // move panels
             for (int i = _allLevels.Length - 1; i > 0; i--)
             {
-                _allLevels[i].transform.DOMoveX(_allLevels[i - 1].transform.position.x, 0.25f, true);
+                if (!click)
+                    _allLevels[i].transform.position = _allLevels[i - 1].transform.position;
+                else
+                    _allLevels[i].transform.DOMoveX(_allLevels[i - 1].transform.position.x, 0.25f, true);
+
                 _allLevels[i - 1].GetComponent<Button>().interactable = false;
             }
-            _allLevels[0].transform.DOMoveX(_allLevels[0].transform.position.x - 750, 0.25f, true);
+            if (!click)
+                _allLevels[0].transform.position -= new Vector3(750, 0, 0);
+            else
+                _allLevels[0].transform.DOMoveX(_allLevels[0].transform.position.x - 750, 0.25f, true);
 
             _allLevels[_currentStageIndex].GetComponent<Button>().interactable = true;
 
@@ -131,10 +143,12 @@ public class ShowLevelSelectState : LevelSelectState
 
             UpdateLevelStageText();
         }
+        /*
         if (_currentStageIndex == 8)
         {
             DisableRightArrow();
         }
+        */
     }
 
     public void DisableRightArrow()
@@ -144,10 +158,10 @@ public class ShowLevelSelectState : LevelSelectState
 
     public void LeftArrow()
     {
-        _sideButtons[0].gameObject.SetActive(true);
-
         if (_currentStageIndex > 0)
         {
+            // _sideButtons[0].gameObject.SetActive(true);
+
             _previousStageIndex = _currentStageIndex;
             _currentStageIndex -= 1;
 
@@ -167,10 +181,12 @@ public class ShowLevelSelectState : LevelSelectState
 
             UpdateLevelStageText();
         }
+        /*
         if (_currentStageIndex == 0)
         {
             DisableLeftArrow();
         }
+        */
     }
 
     public void DisableLeftArrow()

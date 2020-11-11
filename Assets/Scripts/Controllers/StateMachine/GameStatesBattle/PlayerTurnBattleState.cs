@@ -14,6 +14,8 @@ public class PlayerTurnBattleState : BattleState
     PointerEventData _pointerEventData;
     [SerializeField] EventSystem _eventSystem;
 
+    [SerializeField] GameObject tutorialPanel;
+
     [Header("Fusion Card Settings")]
     [SerializeField] ElementCardView _fusionCardView;
     [SerializeField] GameObject _combatButtonObj;
@@ -33,7 +35,7 @@ public class PlayerTurnBattleState : BattleState
     [SerializeField] float _duration;
 
     [Header("Visual Settings")]
-
+    [SerializeField] TextMeshProUGUI _playerTurnText;
 
     bool _selectingFirstCard = true;
     bool _selectingSecondCard = false;
@@ -46,20 +48,63 @@ public class PlayerTurnBattleState : BattleState
     GameObject _selectedMonster;
     public GameObject SelectedMonster => _selectedMonster;
 
+    GameManager _gameManager;
+
+    private void Start()
+    {
+        _gameManager = FindObjectOfType<GameManager>();    
+    }
+
     public override void Enter()
     {
-        
+        StartCoroutine(ShowPlayerTurnText());
     }
 
     public override void Tick()
     {
-        if (_selectedCardIndex1 == -1 || _selectedCardIndex2 == -1)
+        if ((_selectedCardIndex1 == -1 || _selectedCardIndex2 == -1) && _gameManager.finishedTutorial)
+        {
             CheckForSelection();
+        }
     }
 
     public override void Exit()
     {
 
+    }
+
+    IEnumerator ShowPlayerTurnText()
+    {
+        if (!_gameManager.finishedTutorial)
+        {
+            ShowTutorialPanel();
+        }
+
+        while (tutorialPanel.activeInHierarchy)
+            yield return null;
+
+        _playerTurnText.text = "Player Turn";
+        _playerTurnText.gameObject.SetActive(true);
+        _playerTurnText.DOFade(1, 0.25f);
+
+        yield return new WaitForSeconds(1);
+
+        _playerTurnText.DOFade(0, 0.25f);
+
+        yield return new WaitForSeconds(0.25f);
+
+        _playerTurnText.gameObject.SetActive(false);
+    }
+
+    void ShowTutorialPanel()
+    {
+        tutorialPanel.SetActive(true);
+    }
+
+    public void TurnOffTutorialPanel()
+    {
+        _gameManager.finishedTutorial = true;
+        tutorialPanel.SetActive(false);
     }
 
     void CheckForSelection()
@@ -452,7 +497,7 @@ public class PlayerTurnBattleState : BattleState
 
         FadeFusionCardForFusionCombination(false);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.25f);
 
         // hide selected cards
         _battleManager.PlayerHandList[_selectedCardIndex1].SetActive(false);
@@ -533,7 +578,7 @@ public class PlayerTurnBattleState : BattleState
             _selectedMonster.tag = "FusionMonster";
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.75f);
 
         StartBattleState();
     }

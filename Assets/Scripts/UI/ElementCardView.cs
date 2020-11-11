@@ -6,6 +6,7 @@ using TMPro;
 
 public class ElementCardView : MonoBehaviour
 {
+    public bool enemyCard;
     [SerializeField] string _name;
     public string Name { get => _name; set => _name = value; }
 
@@ -15,9 +16,11 @@ public class ElementCardView : MonoBehaviour
     int _levelBoost;
     [SerializeField] TextMeshProUGUI _attackText;
     public int Attack;
+    int _originalAttack;
     int _attackBoost;
     [SerializeField] TextMeshProUGUI _defenseText;
     public int Defense;
+    int _originalDefense;
     int _defenseBoost;
 
     [SerializeField] TextMeshProUGUI _descriptionText;
@@ -46,9 +49,11 @@ public class ElementCardView : MonoBehaviour
         _levelTextUI.text = Level.ToString();
 
         Attack = card.Attack + _attackBoost;
+        _originalAttack = Attack;
         _attackText.text = Attack.ToString();
 
         Defense = card.Defense + _defenseBoost;
+        _originalDefense = Defense;
         _defenseText.text = Defense.ToString();
 
         _descriptionText.text = card.Description;
@@ -58,11 +63,16 @@ public class ElementCardView : MonoBehaviour
         _elementSpriteBackground.sprite = card.SpriteBackground;
         _elementSpriteBackground.color = card.MonsterBackgroundColor;
 
+        if (!enemyCard)
+         _cardBackground.sprite = card.CardBackground;
+
         _elementCard = card;
     }
 
     public void EnemyBattleUpgrade()
     {
+        enemyCard = true;
+
         _attackBoost = (gameManager.CurrentLevel) * 1000;
         _defenseBoost = (gameManager.CurrentLevel) * 1000;
 
@@ -92,6 +102,12 @@ public class ElementCardView : MonoBehaviour
         _attackText.text = Attack.ToString();
         _defenseText.text = Defense.ToString();
         _levelTextUI.text = Level.ToString();
+    }
+
+    public void RevertStatChange()
+    {
+        Attack = _originalAttack;
+        Defense = _originalDefense;
     }
 
     public void PlayCardEffect()

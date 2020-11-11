@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] int _gold = 100;
     public int Gold { get => _gold; set => _gold = value; }
 
+    public bool finishedTutorial = false;
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -52,7 +54,8 @@ public class GameManager : MonoBehaviour
 
     public void UnlockLevel()
     {
-        _levelsUnlocked++;
+        if (_currentLevel == _levelsUnlocked)
+            _levelsUnlocked++;
     }
 
     public void SelectLevel(int level)

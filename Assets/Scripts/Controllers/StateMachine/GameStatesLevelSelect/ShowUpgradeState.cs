@@ -85,7 +85,7 @@ public class ShowUpgradeState : LevelSelectState
         _costText.text = "Cost: " + _cost.ToString(); ;
 
         _gold = _gameManager.Gold;
-        _goldText.text = "Gold: " + _gold.ToString();
+        _goldText.text = _gold.ToString();
     }
 
     void OnPressedUpgrade()
@@ -98,6 +98,7 @@ public class ShowUpgradeState : LevelSelectState
             // upgrade card
             ElementCard card = (ElementCard)_gameManager.Deck.GetCard(_cardInDeckIndex);
             card.UpgradeCard();
+            
             _gameManager.Deck.SetCard(card, _cardInDeckIndex);
 
             // TODO- add success message

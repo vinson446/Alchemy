@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using DG.Tweening;
+using TMPro;
 
 public class EnemyTurnBattleState : BattleState
 {
@@ -19,6 +20,7 @@ public class EnemyTurnBattleState : BattleState
     [SerializeField] ElementCardData[] _deckConfig3;
     [SerializeField] Transform _initalPos;
     [SerializeField] Transform _battlePosStandby;
+    [SerializeField] TextMeshProUGUI _enemyTurnText;
     Deck<Card> _deck = new Deck<Card>();
 
     [Header("Animation Settings")]
@@ -48,6 +50,7 @@ public class EnemyTurnBattleState : BattleState
 
     IEnumerator EnemyThinkingRoutine(float pauseDuration)
     {
+        StartCoroutine(ShowEnemyTurnText());
         PickAMonsterFromDeck();
         SummonMonster();
 
@@ -56,6 +59,21 @@ public class EnemyTurnBattleState : BattleState
         yield return new WaitForSeconds(pauseDuration);
 
         StateMachine.ChangeState<PlayerDrawBattleState>();
+    }
+
+    IEnumerator ShowEnemyTurnText()
+    {
+        _enemyTurnText.text = "Enemy Turn";
+        _enemyTurnText.gameObject.SetActive(true);
+        _enemyTurnText.DOFade(1, 0.25f);
+
+        yield return new WaitForSeconds(1);
+
+        _enemyTurnText.DOFade(0, 0.25f);
+
+        yield return new WaitForSeconds(0.25f);
+
+        _enemyTurnText.gameObject.SetActive(false);
     }
 
     // called by setup battle state
@@ -133,7 +151,6 @@ public class EnemyTurnBattleState : BattleState
 
         // cardMovement.gameObject.transform.DOScale(_growthFactor, _duration);
     }
-
 
     public void ReturnMonsterFromDeck()
     {

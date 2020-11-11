@@ -89,10 +89,10 @@ public class FightBattleState : BattleState
         if (continueBattle)
         {
             // move out
-            _playerMonster.transform.DOMoveX(_playerMoveOutPos.transform.position.x, _durationMoveOut);
-            _enemyMonster.transform.DOMoveX(_enemyMoveOutPos.transform.position.x, _durationMoveOut);
+            _playerMonster.transform.DOMoveX(_playerMoveOutPos.transform.position.x, _durationMoveIn * 1.5f);
+            _enemyMonster.transform.DOMoveX(_enemyMoveOutPos.transform.position.x, _durationMoveIn * 1.5f);
 
-            yield return new WaitForSeconds(_durationMoveOut);
+            yield return new WaitForSeconds(_durationMoveIn * 1.5f);
 
             // COLLIDE
             _playerMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn);
@@ -189,6 +189,7 @@ public class FightBattleState : BattleState
         // reset enemy stuff
         _enemyMonster.SetActive(false);
         _enemyTurnBattleState.ReturnMonsterFromDeck();
+        _enemyMonster.GetComponent<ElementCardView>().RevertStatChange();
 
         StateMachine.ChangeState<EnemyTurnBattleState>();
     }
