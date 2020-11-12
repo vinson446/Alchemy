@@ -10,14 +10,20 @@ public class PlayerDrawBattleState : BattleState
 
     PlayerTurnBattleState playerTurnBattleState;
 
+    SoundEffects soundEffects;
+
     private void Start()
     {
-        playerTurnBattleState = GetComponent<PlayerTurnBattleState>();    
+
     }
 
     public override void Enter()
     {
+        playerTurnBattleState = GetComponent<PlayerTurnBattleState>();
+        soundEffects = FindObjectOfType<SoundEffects>();
+
         Draw();
+
         playerTurnBattleState.ResetFusionMonsterPositioning();
     }
 
@@ -53,7 +59,7 @@ public class PlayerDrawBattleState : BattleState
                 GameObject cardDrawn = _battleManager.DeckList[_battleManager.BattleDeck.LastIndex];
                 _battleManager.PlayerHandList[i] = cardDrawn;
 
-                cardDrawn.transform.parent = _battleManager.PlayerHandPositions[i].transform;
+                cardDrawn.transform.SetParent(_battleManager.PlayerHandPositions[i].transform);
 
                 CardMovement cardMovement = cardDrawn.GetComponent<CardMovement>();
                 if (cardMovement != null)
@@ -62,6 +68,8 @@ public class PlayerDrawBattleState : BattleState
                 }
 
                 _battleManager.DeckList.Remove(cardDrawn);
+
+                soundEffects.PlayCardSound();
 
                 yield return new WaitForSeconds(0.2f);
 
@@ -80,6 +88,8 @@ public class PlayerDrawBattleState : BattleState
         int count = _battleManager.Discard.Count;
         for (int i = 0; i < count; i++)
         {
+            soundEffects.PlayCardSound();
+
             // front end- add cards in discard to deck
             CardMovement cardMovement = _battleManager.DiscardList[0].GetComponent<CardMovement>();
             cardMovement.transform.parent = _battleManager.DeckPos;
@@ -94,7 +104,7 @@ public class PlayerDrawBattleState : BattleState
             _battleManager.BattleDeck.Add(_battleManager.Discard.GetCard(0));
             _battleManager.Discard.Remove(0);
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
         }
 
         // back end

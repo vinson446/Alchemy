@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public Deck<Card> Deck { get => _deck; set => _deck = value; }
 
     [SerializeField] int _levelsUnlocked = 1;
-    public int LevelsUnlocked => _levelsUnlocked;
+    public int LevelsUnlocked { get => _levelsUnlocked; set => _levelsUnlocked = value; }
 
     [SerializeField] int _currentLevel = 1;
     public int CurrentLevel { get => _currentLevel; set => _currentLevel = value; }
@@ -26,19 +26,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
+        if (_instance == null)
         {
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-    }
+        else
+        {
+            Destroy(gameObject);
+        }
 
-    private void Start()
-    {
         CreateDeck();
     }
 
@@ -55,7 +52,10 @@ public class GameManager : MonoBehaviour
     public void UnlockLevel()
     {
         if (_currentLevel == _levelsUnlocked)
+        {
             _levelsUnlocked++;
+            print(_levelsUnlocked);
+        }
     }
 
     public void SelectLevel(int level)

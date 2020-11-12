@@ -20,16 +20,8 @@ public class ShowLevelSelectState : LevelSelectState
     public int _currentStageIndex;
     public int _previousStageIndex;
 
-    GameManager gameManager;
-
-    private void Start()
-    {
-
-    }
-
     public override void Enter()
     {
-        gameManager = FindObjectOfType<GameManager>();
         GoToCurrentLevel();
 
         _levelSelectPanel.SetActive(true);
@@ -93,7 +85,7 @@ public class ShowLevelSelectState : LevelSelectState
 
     void OnPressedBattle()
     {
-        gameManager.SelectLevel(_currentStageIndex);
+        GameManager._instance.SelectLevel(_currentStageIndex);
         SceneManager.LoadScene("Battle");
     }
 
@@ -104,7 +96,7 @@ public class ShowLevelSelectState : LevelSelectState
 
     void GoToCurrentLevel()
     {
-        for (int i = 0; i < gameManager.CurrentLevel; i++)
+        for (int i = 0; i < GameManager._instance.CurrentLevel; i++)
         {
             RightArrow(false);
         }
@@ -112,7 +104,7 @@ public class ShowLevelSelectState : LevelSelectState
 
     public void RightArrow(bool click)
     {
-        if ((_currentStageIndex < _allLevels.Length - 1) && (_currentStageIndex < gameManager.LevelsUnlocked))
+        if ((_currentStageIndex < _allLevels.Length - 1) && (_currentStageIndex < GameManager._instance.LevelsUnlocked))
         {
             // _sideButtons[1].gameObject.SetActive(true);
 

@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class SetupBattleState : BattleState
 {
     [SerializeField] BattleManager _battleManager;
-    GameManager _gameManager;
 
     [SerializeField] Image backgroundImage;
     [SerializeField] Sprite[] battleSceneryImages;
@@ -24,7 +23,6 @@ public class SetupBattleState : BattleState
 
         // CANT change state while still in Enter()/Exit() transition
         // DONT put ChangeState<> here
-        _gameManager = FindObjectOfType<GameManager>();
 
         _enemyTurnBattleState = GetComponent<EnemyTurnBattleState>();
         _enemyTurnBattleState.CreateEnemyDeck();
@@ -69,10 +67,10 @@ public class SetupBattleState : BattleState
     // assemble battle deck with game manager's deck to use in battle
     void SetupBattleDeck()
     {
-        for (int i = 0; i < _gameManager.Deck.Count; i++)
+        for (int i = 0; i < GameManager._instance.Deck.Count; i++)
         {
             // back end
-            _battleManager.BattleDeck.Add(_gameManager.Deck.GetCard(i));
+            _battleManager.BattleDeck.Add(GameManager._instance.Deck.GetCard(i));
         }
     }
 
@@ -81,7 +79,7 @@ public class SetupBattleState : BattleState
     {
         for (int i = 0; i < 5; i++)
         {
-            ElementCard card = new ElementCard(_gameManager.DeckConfig[0]);
+            ElementCard card = new ElementCard(GameManager._instance.DeckConfig[0]);
             _battleManager.PlayerHand.Add(card, DeckPosition.Top);
         }
     }
@@ -95,7 +93,7 @@ public class SetupBattleState : BattleState
     // display cards visually in battle deck
     void ShowAllCardsInDeck()
     {
-        for (int i = 0; i < _gameManager.Deck.Count; i++)
+        for (int i = 0; i < GameManager._instance.Deck.Count; i++)
         {
             ElementCardView c = _battleManager.DeckList[i].GetComponent<ElementCardView>();
             ElementCard newCard = (ElementCard)_battleManager.BattleDeck.GetCard(i);
@@ -105,19 +103,19 @@ public class SetupBattleState : BattleState
 
     void SetupBattleScenery()
     {
-        if (_gameManager.CurrentLevel >= 6)
+        if (GameManager._instance.CurrentLevel >= 6)
         {
             backgroundImage.sprite = battleSceneryImages[2];
             uiImages[0].color = uiColors[2];
             uiImages[1].color = uiColors[2];
         }
-        else if (_gameManager.CurrentLevel >= 3)
+        else if (GameManager._instance.CurrentLevel >= 3)
         {
             backgroundImage.sprite = battleSceneryImages[1];
             uiImages[0].color = uiColors[1];
             uiImages[1].color = uiColors[1];
         }
-        else if (_gameManager.CurrentLevel >= 0)
+        else if (GameManager._instance.CurrentLevel >= 0)
         {
             backgroundImage.sprite = battleSceneryImages[0];
             uiImages[0].color = uiColors[0];

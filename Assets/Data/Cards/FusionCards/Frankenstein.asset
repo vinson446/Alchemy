@@ -16,8 +16,7 @@ MonoBehaviour:
   _level: 1
   _attack: 0
   _defense: 0
-  _description: 'Fusion Card: Level up this card (increase Atk and Def by Level *
-    500)'
+  _description: 'Fusion Card: Increase this card''s Atk and Def its Level * 500'
   _monsterSprite: {fileID: 21300000, guid: f47c881640bf9074ab55d84be99bc34d, type: 3}
   _monsterColor: {r: 0.0021864357, g: 0.254717, b: 0, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}

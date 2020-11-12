@@ -15,11 +15,13 @@ public class ShowDeckState : LevelSelectState
 
     private void Start()
     {
-        _gameManager = FindObjectOfType<GameManager>();    
+          
     }
 
     public override void Enter()
     {
+        _gameManager = FindObjectOfType<GameManager>();
+
         _deckPanel.SetActive(true);
 
         ShowAllCardStats();

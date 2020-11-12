@@ -14,6 +14,7 @@ public class ElementCardView : MonoBehaviour
     [SerializeField] TextMeshProUGUI _levelTextUI;
     public int Level;
     int _levelBoost;
+    int _originalLevel;
     [SerializeField] TextMeshProUGUI _attackText;
     public int Attack;
     int _originalAttack;
@@ -33,11 +34,11 @@ public class ElementCardView : MonoBehaviour
 
     ElementCard _elementCard;
 
-    GameManager gameManager;
+    bool start = false;
 
     private void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
+
     }
 
     public void Display(ElementCard card)
@@ -49,12 +50,18 @@ public class ElementCardView : MonoBehaviour
         _levelTextUI.text = Level.ToString();
 
         Attack = card.Attack + _attackBoost;
-        _originalAttack = Attack;
         _attackText.text = Attack.ToString();
 
         Defense = card.Defense + _defenseBoost;
-        _originalDefense = Defense;
         _defenseText.text = Defense.ToString();
+
+        if (!start)
+        {
+            _originalLevel = Level;
+            _originalAttack = Attack;
+            _originalDefense = Defense;
+            start = true;
+        }
 
         _descriptionText.text = card.Description;
 
@@ -73,17 +80,17 @@ public class ElementCardView : MonoBehaviour
     {
         enemyCard = true;
 
-        _attackBoost = (gameManager.CurrentLevel) * 1000;
-        _defenseBoost = (gameManager.CurrentLevel) * 1000;
+        _attackBoost = (GameManager._instance.CurrentLevel) * 1000;
+        _defenseBoost = (GameManager._instance.CurrentLevel) * 1000;
 
-        _levelBoost = (gameManager.CurrentLevel);
+        _levelBoost = (GameManager._instance.CurrentLevel);
 
         // set card background color
-        if (gameManager.CurrentLevel >= 6)
+        if (GameManager._instance.CurrentLevel >= 6)
         {
             _cardBackground.sprite = cardBordersForEnemies[2];
         }
-        else if (gameManager.CurrentLevel >= 3)
+        else if (GameManager._instance.CurrentLevel >= 3)
         {
             _cardBackground.sprite = cardBordersForEnemies[1];
         }
@@ -108,6 +115,11 @@ public class ElementCardView : MonoBehaviour
     {
         Attack = _originalAttack;
         Defense = _originalDefense;
+        Level = _originalLevel;
+
+        _attackText.text = Attack.ToString();
+        _defenseText.text = Defense.ToString();
+        _levelTextUI.text = Level.ToString();
     }
 
     public void PlayCardEffect()

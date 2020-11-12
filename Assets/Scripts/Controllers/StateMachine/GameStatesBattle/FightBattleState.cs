@@ -36,8 +36,12 @@ public class FightBattleState : BattleState
     int _damageDoneToPlayer;
     int _damageDoneToEnemy;
 
+    SoundEffects soundEffects;
+
     public override void Enter()
     {
+        soundEffects = FindObjectOfType<SoundEffects>();
+
         _playerTurnBattleState = GetComponent<PlayerTurnBattleState>();
         _enemyTurnBattleState = GetComponent<EnemyTurnBattleState>();
 
@@ -148,11 +152,24 @@ public class FightBattleState : BattleState
     {
         GameObject playerDamageObj = Instantiate(_damageTextObj, _spawnPlayerDmgObj.position, Quaternion.identity);
         playerDamageObj.GetComponent<DamagePopup>().SetupDamage(pDamage, 1f);
-        playerDamageObj.transform.parent = _spawnPlayerDmgObj;
+        playerDamageObj.transform.SetParent(_spawnPlayerDmgObj);
+        if (pDamage < 0)
+        {
+            soundEffects.PlayPlayerTakeDamageSound();
+        }
+        else if (pDamage > 0)
+        {
+            soundEffects.PlayPlayerHealSound();
+        }
 
         GameObject enemyDamageObj = Instantiate(_damageTextObj, _spawnEnemyDmgObj.position, Quaternion.identity);
         enemyDamageObj.GetComponent<DamagePopup>().SetupDamage(eDamage, 1f);
-        enemyDamageObj.transform.parent = _spawnEnemyDmgObj;
+        enemyDamageObj.transform.SetParent(_spawnEnemyDmgObj);
+        if (eDamage < 0)
+        {
+            soundEffects.PlayEnemyTakeDamageSound();
+        }
+
     }
 
     bool ActivatePlayerPlayEffect()
@@ -161,7 +178,7 @@ public class FightBattleState : BattleState
 
         ElementCardView cardView = _playerMonster.GetComponent<ElementCardView>();
         //playerDamageObj.GetComponent<DamagePopup>().SetupMessage("Activate " + cardView.Name + "\nPlay Effect", 1f);
-        playerDamageObj.transform.parent = _spawnPlayerMessageObj;
+        playerDamageObj.transform.SetParent(_spawnPlayerMessageObj);
 
         cardView.PlayCardEffect();
 

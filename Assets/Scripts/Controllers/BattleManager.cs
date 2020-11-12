@@ -62,11 +62,11 @@ public class BattleManager : MonoBehaviour
     Deck<Card> _playerHand = new Deck<Card>();
     public Deck<Card> PlayerHand => _playerHand;
 
-    GameManager _gameManager;
+    SoundEffects soundEffects;
 
     private void Start()
     {
-        _gameManager = FindObjectOfType<GameManager>();
+        soundEffects = FindObjectOfType<SoundEffects>();
 
         SetupPlayerHP();
         SetupEnemyHP();
@@ -75,12 +75,12 @@ public class BattleManager : MonoBehaviour
 
     void SetupPlayerHP()
     {
-        if (_gameManager.CurrentLevel >= 6)
+        if (GameManager._instance.CurrentLevel >= 6)
         {
             _playerHP = 12000;
             _playerHPText.text = _playerHP.ToString();
         }
-        else if (_gameManager.CurrentLevel >= 3)
+        else if (GameManager._instance.CurrentLevel >= 3)
         {
             _playerHP = 8000;
             _playerHPText.text = _playerHP.ToString();
@@ -94,7 +94,7 @@ public class BattleManager : MonoBehaviour
 
     public void SetupEnemyHP()
     {
-        _enemyHP = 4000 + (_gameManager.CurrentLevel) * 2000;
+        _enemyHP = 4000 + (GameManager._instance.CurrentLevel) * 2000;
         _enemyHPText.text = _enemyHP.ToString();
     }
 
@@ -128,23 +128,31 @@ public class BattleManager : MonoBehaviour
 
     void WinBattle()
     {
-        winLosePanel.SetActive(true);
-        winLoseText.text = "Victory!";
+        if (!winLosePanel.activeInHierarchy)
+        {
+            soundEffects.PlayVictorySound();
 
-        goldReward = _gameManager.CurrentLevel * 200 + 100;
-        goldImage.SetActive(true);
-        rewardText.text = "+" + goldReward.ToString() + " Gold";
+            winLosePanel.SetActive(true);
+            winLoseText.text = "Victory!";
 
-        _gameManager.IncrementGold(goldReward);
-        _gameManager.UnlockLevel();
+            goldReward = GameManager._instance.CurrentLevel * 400 + 100;
+            goldImage.SetActive(true);
+            rewardText.text = "+" + goldReward.ToString() + " Gold";
+
+            GameManager._instance.IncrementGold(goldReward);
+            GameManager._instance.UnlockLevel();
+        }
     }
 
     void LoseBattle()
     {
+        soundEffects.PlayDefeatSound();
+
         winLosePanel.SetActive(true);
         winLoseText.text = "Defeat...";
 
         goldReward = 0;
+        goldImage.SetActive(false);
         rewardText.text = "";
     }
 

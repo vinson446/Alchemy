@@ -31,15 +31,22 @@ public class ShowUpgradeState : LevelSelectState
     ShowDeckState _showDeckState;
     GameManager _gameManager;
 
+    SoundEffects soundEffects;
+
     private void Start()
     {
-        _showDeckState = FindObjectOfType<ShowDeckState>();
 
-        _gameManager = FindObjectOfType<GameManager>();
     }
 
     public override void Enter()
     {
+        soundEffects = FindObjectOfType<SoundEffects>();
+        soundEffects.PlayClickSound();
+
+        _showDeckState = GetComponent<ShowDeckState>();
+
+        _gameManager = FindObjectOfType<GameManager>();
+
         _deckPanel.SetActive(true);
         _upgradePanel.SetActive(true);
 
@@ -62,7 +69,6 @@ public class ShowUpgradeState : LevelSelectState
         _upgradePanel.SetActive(false);
     }
 
-    
     void ShowSelectedCard()
     {
         ElementCard card = (ElementCard)_gameManager.Deck.GetCard(_cardInDeckIndex);
@@ -102,12 +108,14 @@ public class ShowUpgradeState : LevelSelectState
             _gameManager.Deck.SetCard(card, _cardInDeckIndex);
 
             // TODO- add success message
+            soundEffects.PlayUpgradeSound();
 
             OnPressedDeck();
         }
         else
         {
             // TODO- add fail message
+            soundEffects.PlayNoMoneySound();
 
             OnPressedDeck();
         }

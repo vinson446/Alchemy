@@ -35,9 +35,12 @@ public class EnemyTurnBattleState : BattleState
     public GameObject SelectedMonster => _selectedMonster;
 
     GameManager gameManager;
+    SoundEffects soundEffects;
 
     public override void Enter()
     {
+        soundEffects = FindObjectOfType<SoundEffects>();
+
         EnemyTurnBegan?.Invoke();
 
         StartCoroutine(EnemyThinkingRoutine(_pauseDuration));
@@ -67,7 +70,11 @@ public class EnemyTurnBattleState : BattleState
         _enemyTurnText.gameObject.SetActive(true);
         _enemyTurnText.DOFade(1, 0.25f);
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.05f);
+
+        soundEffects.PlayEnemyTurnSound();
+
+        yield return new WaitForSeconds(0.95f);
 
         _enemyTurnText.DOFade(0, 0.25f);
 

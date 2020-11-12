@@ -49,14 +49,24 @@ public class PlayerTurnBattleState : BattleState
     public GameObject SelectedMonster => _selectedMonster;
 
     GameManager _gameManager;
+    AudioSource _audioSource;
+    [SerializeField] AudioClip moveCardSFX;
+    [SerializeField] float moveCardPitch;
+    [SerializeField] float moveCardVolume;
+
+    SoundEffects soundEffects;
 
     private void Start()
     {
-        _gameManager = FindObjectOfType<GameManager>();    
+
     }
 
     public override void Enter()
     {
+        soundEffects = FindObjectOfType<SoundEffects>();
+        _gameManager = FindObjectOfType<GameManager>();
+        _audioSource = GetComponentInParent<AudioSource>();
+
         StartCoroutine(ShowPlayerTurnText());
     }
 
@@ -87,7 +97,9 @@ public class PlayerTurnBattleState : BattleState
         _playerTurnText.gameObject.SetActive(true);
         _playerTurnText.DOFade(1, 0.25f);
 
-        yield return new WaitForSeconds(1);
+        soundEffects.PlayPlayerTurnSound();
+
+        yield return new WaitForSeconds(1f);
 
         _playerTurnText.DOFade(0, 0.25f);
 
@@ -129,6 +141,8 @@ public class PlayerTurnBattleState : BattleState
                 {
                     int index = int.Parse(slot.name);
                     SelectCardCoroutine(index, _selectingFirstCard);
+
+                    soundEffects.PlayArrowSound();
                 }
                 // let combat button be clicked if it has been
                 else if (result.gameObject.GetComponentInParent<Button>() != null)
@@ -170,7 +184,7 @@ public class PlayerTurnBattleState : BattleState
                     if (cardMovement != null)
                     {
                         cardMovement.TargetTransform = _battleManager.PlayerHandPositions[i];
-                        cardMovement.transform.parent = _battleManager.PlayerHandPositions[i];
+                        cardMovement.transform.SetParent(_battleManager.PlayerHandPositions[i]);
                     }
 
                     _battleManager.PlayerShrinkPositions[i].rotation = Quaternion.Euler(new Vector3(0, 0, 0));
@@ -190,7 +204,7 @@ public class PlayerTurnBattleState : BattleState
                     // reset positioning and scale
                     CardMovement cardMovement = _battleManager.PlayerHandList[i].GetComponent<CardMovement>();
                     cardMovement.TargetTransform = _battleManager.PlayerHandPositions[i];
-                    cardMovement.transform.parent = _battleManager.PlayerHandPositions[i];
+                    cardMovement.transform.SetParent(_battleManager.PlayerHandPositions[i]);
 
                     _battleManager.PlayerShrinkPositions[i].rotation = Quaternion.Euler(new Vector3(0, 0, 0));
                     _battleManager.PlayerHandList[i].transform.DOScale(_normFactor, _duration);
@@ -274,7 +288,7 @@ public class PlayerTurnBattleState : BattleState
                     if (cardMovement != null)
                     {
                         cardMovement.TargetTransform = _battleManager.PlayerShrinkPositions[i];
-                        cardMovement.transform.parent = _battleManager.PlayerShrinkPositions[i];
+                        cardMovement.transform.SetParent(_battleManager.PlayerShrinkPositions[i]);
                     }
 
                     _battleManager.PlayerHandList[i].transform.DOScale(_shrinkFactor, _duration);
@@ -292,7 +306,7 @@ public class PlayerTurnBattleState : BattleState
             if (cardMovement != null)
             {
                 cardMovement.TargetTransform = _battleManager.PlayerPlayingCardPositions[0];
-                cardMovement.transform.parent = _battleManager.PlayerPlayingCardPositions[0];
+                cardMovement.transform.SetParent(_battleManager.PlayerPlayingCardPositions[0]);
             }
 
             _battleManager.PlayerHandList[_selectedCardIndex1].transform.DOScale(_growthFactor, _duration);
@@ -304,7 +318,7 @@ public class PlayerTurnBattleState : BattleState
             if (cardMovement != null)
             {
                 cardMovement.TargetTransform = _battleManager.PlayerPlayingCardPositions[1];
-                cardMovement.transform.parent = _battleManager.PlayerPlayingCardPositions[1];
+                cardMovement.transform.SetParent(_battleManager.PlayerPlayingCardPositions[1]);
             }
 
             _battleManager.PlayerHandList[_selectedCardIndex2].transform.DOScale(_growthFactor, _duration);
@@ -589,7 +603,7 @@ public class PlayerTurnBattleState : BattleState
         {
             // front end- remove selected card from player hand to discard
             GameObject selectedCard = _battleManager.PlayerHandList[_selectedCardIndex1];
-            selectedCard.transform.parent = _battleManager.DiscardPosition;
+            selectedCard.transform.SetParent(_battleManager.DiscardPosition);
             selectedCard.transform.DOScale(_normFactor, _duration);
             selectedCard.SetActive(true);
 
@@ -615,7 +629,7 @@ public class PlayerTurnBattleState : BattleState
         {
             // front end- remove selected card from player hand to discard
             GameObject selectedCard = _battleManager.PlayerHandList[_selectedCardIndex2];
-            selectedCard.transform.parent = _battleManager.DiscardPosition;
+            selectedCard.transform.SetParent(_battleManager.DiscardPosition);
             selectedCard.transform.DOScale(_normFactor, _duration);
             selectedCard.SetActive(true);
 
@@ -647,7 +661,7 @@ public class PlayerTurnBattleState : BattleState
                 if (cardMovement != null)
                 {
                     cardMovement.TargetTransform = _battleManager.PlayerHandPositions[i];
-                    cardMovement.transform.parent = _battleManager.PlayerHandPositions[i];
+                    cardMovement.transform.SetParent(_battleManager.PlayerHandPositions[i]);
                     cardMovement.gameObject.SetActive(true);
 
                     GameObject glowImageObj = cardMovement.gameObject;

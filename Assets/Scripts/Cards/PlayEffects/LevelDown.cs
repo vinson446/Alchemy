@@ -19,6 +19,6 @@ public class LevelDown : CardPlayEffect
         // use higher stat out of atk and def / 2 to heal player
         ElementCardView cardView = _fightBattleState._enemyMonster.GetComponent<ElementCardView>();
 
-        cardView.StatChange(cardView.Attack - cardView.Level * 500, cardView.Defense - cardView.Level * 500, cardView.Level - 1);
+        cardView.StatChange(cardView.Attack - cardView.Level * 500, cardView.Defense - cardView.Level * 500, cardView.Level);
     }
 }

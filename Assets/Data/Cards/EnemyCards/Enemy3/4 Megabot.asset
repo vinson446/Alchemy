@@ -16,7 +16,7 @@ MonoBehaviour:
   _level: 2
   _attack: 2000
   _defense: 2000
-  _description: Space Card
+  _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: cbd507bdd93098648a53b226ae95fa92, type: 3}
   _monsterColor: {r: 0, g: 0.6859784, b: 1, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}
