@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[System.Serializable]
 // Deck is generic, with exception that passed in type must be of type Card
 public class Deck<T> where T : Card
 {

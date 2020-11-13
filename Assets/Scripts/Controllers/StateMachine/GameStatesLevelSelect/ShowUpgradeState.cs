@@ -110,14 +110,14 @@ public class ShowUpgradeState : LevelSelectState
             
             _gameManager.Deck.SetCard(card, _cardInDeckIndex);
 
-            // TODO- add success message
             soundEffects.PlayUpgradeSound();
+
+            GameManager._instance.SaveGame();
 
             OnPressedDeck();
         }
         else
         {
-            // TODO- add fail message
             soundEffects.PlayNoMoneySound();
 
             GameObject noMoneyText = Instantiate(noMoneyPopup, noMoneyPos.position, Quaternion.identity);

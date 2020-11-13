@@ -36,10 +36,11 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        CreateDeck();
+        if (_deck.IsEmpty)
+            CreateDeck();
     }
 
-    void CreateDeck()
+    public void CreateDeck()
     {
         foreach (ElementCardData elementData in _deckConfig)
         {
@@ -65,5 +66,42 @@ public class GameManager : MonoBehaviour
     public void IncrementGold(int gold)
     {
         _gold += gold;
+    }
+
+    public void SaveGame()
+    {
+        Save.SaveGame(this);
+    }
+
+    public void LoadGame()
+    {
+        SaveData data = Save.LoadGame();
+
+        if (data != null)
+        {
+            print("load game");
+            _levelsUnlocked = data.levelsUnlocked;
+            _gold = data.gold;
+            // _deck = data.deck;
+
+            if (_deck.IsEmpty)
+                CreateDeck();
+
+            for (int i = 0; i < 30; i++)
+            {
+                ((ElementCard)_deck.GetCard(i)).SetLevel(data.level[i]);
+                ((ElementCard)_deck.GetCard(i)).SetAttack(data.attack[i]);
+                ((ElementCard)_deck.GetCard(i)).SetDefense(data.defense[i]);
+            }
+
+            MenuManager menuManager = FindObjectOfType<MenuManager>();
+            menuManager.PlayGame();
+        }
+        else
+        {
+            print("null");
+            MenuManager menuManager = FindObjectOfType<MenuManager>();
+            menuManager.PlayGame();
+        }
     }
 }

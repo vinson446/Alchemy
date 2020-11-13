@@ -18,9 +18,14 @@ public class MenuManager : MonoBehaviour
     [SerializeField] float duration2;
     [SerializeField] float waitTime;
 
+    [SerializeField] Button startButton;
+    [SerializeField] Button continueButton;
+
     private void Start()
     {
         StartCoroutine(MenuFade());
+
+        continueButton.onClick.AddListener(GameManager._instance.LoadGame);
     }
 
     IEnumerator MenuFade()

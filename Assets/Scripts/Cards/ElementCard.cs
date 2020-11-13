@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class ElementCard : Card
 {
     public int Attack { get; private set; }
@@ -10,6 +11,7 @@ public class ElementCard : Card
     // parallel arrays
     public ElementCardData[] FusionCombinations { get; private set; }
     public ElementCardData[] FusionMonsters { get; private set; }
+    Sprite[] cardBackgrounds = new Sprite[3];
 
     ElementCardData elementCardData;
     public ElementCardData ElementCardData { get => elementCardData; set => elementCardData = value; }
@@ -28,7 +30,16 @@ public class ElementCard : Card
         SpriteBackground = Data.SpriteBackground;
         MonsterBackgroundColor = Data.MonsterBackgroundColor;
 
-        CardBackground = Data.CardBackground[0];
+        for (int i = 0; i < Data.CardBackground.Length; i++)
+        {
+            cardBackgrounds[i] = Data.CardBackground[i];
+        }
+        if (Level >= 6)
+            CardBackground = cardBackgrounds[2];
+        else if (Level >= 3)
+            CardBackground = cardBackgrounds[2];
+        else
+            CardBackground = cardBackgrounds[0];
 
         FusionCombinations = Data.FusionCombinations;
         FusionMonsters = Data.FusionMonsters;
@@ -41,6 +52,31 @@ public class ElementCard : Card
     public override void Play()
     {
         CardEffect.Activate();
+    }
+
+    public void SetLevel(int level)
+    {
+        Level = level;
+    }
+
+    public void SetAttack(int atk)
+    {
+        Attack = atk;
+    }
+
+    public void SetDefense(int def)
+    {
+        Defense = def;
+    }
+
+    public void SetBackground()
+    {
+        if (Level >= 6)
+            CardBackground = cardBackgrounds[2];
+        else if (Level >= 3)
+            CardBackground = cardBackgrounds[1];
+        else
+            CardBackground = cardBackgrounds[0];
     }
 
     public void UpgradeCard()

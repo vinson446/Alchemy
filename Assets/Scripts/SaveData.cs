@@ -1,15 +1,28 @@
-﻿using UnityEngine;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public static class SaveData 
+[System.Serializable]
+public class SaveData 
 {
-    public static void SaveDeck()
+    public int levelsUnlocked;
+    public int gold;
+    public int[] level = new int[30];
+    public int[] attack = new int[30];
+    public int[] defense = new int[30];
+    // public Card[] deck = new Card[30];
+
+    public SaveData(GameManager gm)
     {
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/player.deck";
-        FileStream stream = new FileStream(path, FileMode.Create);
-
-
+        levelsUnlocked = gm.LevelsUnlocked;
+        gold = gm.Gold;
+        // deck = gm.Deck;
+        
+        for (int i = 0; i < gm.Deck.Count; i++)
+        {
+            level[i] = ((ElementCard)gm.Deck.GetCard(i)).Level;
+            attack[i] = ((ElementCard)gm.Deck.GetCard(i)).Attack;
+            defense[i] = ((ElementCard)gm.Deck.GetCard(i)).Defense;
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // STRETCH public enum CardType { Element, Spell };
-
+[System.Serializable]
 public abstract class Card 
 {
     // STRETCH public CardType cardType { get; protected set; }

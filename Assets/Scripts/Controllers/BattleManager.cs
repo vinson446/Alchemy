@@ -141,6 +141,7 @@ public class BattleManager : MonoBehaviour
 
             GameManager._instance.IncrementGold(goldReward);
             GameManager._instance.UnlockLevel();
+            GameManager._instance.SaveGame();
         }
     }
 

@@ -67,6 +67,7 @@ public class ElementCardView : MonoBehaviour
 
         _elementSprite.sprite = card.MonsterSprite;
         _elementSprite.color = card.MonsterColor;
+        card.SetBackground();
         _elementSpriteBackground.sprite = card.SpriteBackground;
         _elementSpriteBackground.color = card.MonsterBackgroundColor;
 
