@@ -69,6 +69,11 @@ public class SoundEffects : MonoBehaviour
     [SerializeField] float defeatPitch;
     [SerializeField] float defeatVolume;
 
+    [Header("Collide Sound")]
+    [SerializeField] AudioClip collideSFX;
+    [SerializeField] float collidePitch;
+    [SerializeField] float collideVolume;
+
     AudioSource audioSource;
 
     // Start is called before the first frame update
@@ -150,6 +155,13 @@ public class SoundEffects : MonoBehaviour
         audioSource.pitch = enemyTurnPitch;
         audioSource.volume = enemyTurnVolume;
         audioSource.PlayOneShot(enemyTurnSFX);
+    }
+
+    public void PlayCollideSound()
+    {
+        audioSource.pitch = collidePitch;
+        audioSource.volume = collideVolume;
+        audioSource.PlayOneShot(collideSFX);
     }
 
     public void PlayEnemyTakeDamageSound()

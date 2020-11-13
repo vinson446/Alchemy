@@ -17,9 +17,14 @@ public class SetupBattleState : BattleState
 
     EnemyTurnBattleState _enemyTurnBattleState;
 
+    BGM bgm;
+    [SerializeField] AudioClip[] bgms;
+    AudioClip clip;
+
     public override void Enter()
     {
         _activated = false;
+        bgm = FindObjectOfType<BGM>();
 
         // CANT change state while still in Enter()/Exit() transition
         // DONT put ChangeState<> here
@@ -29,6 +34,7 @@ public class SetupBattleState : BattleState
         _enemyTurnBattleState.ShuffleEnemyDeck();
 
         SetupBattle();
+        SetupBGM();
         SetupBattleScenery();
 
         StateMachine.Input.PressedGoToLevelSelect += OnPressedLevelSelect;
@@ -121,5 +127,23 @@ public class SetupBattleState : BattleState
             uiImages[0].color = uiColors[0];
             uiImages[1].color = uiColors[0];
         }
+    }
+
+    void SetupBGM()
+    {
+        if (GameManager._instance.CurrentLevel >= 6)
+        {
+            clip = bgms[2];
+        }
+        else if (GameManager._instance.CurrentLevel >= 3)
+        {
+            clip = bgms[1];
+        }
+        else 
+        {
+            clip = bgms[0];
+        }
+
+        bgm.StartFadeIn(clip);
     }
 }

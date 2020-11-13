@@ -26,6 +26,9 @@ public class FightBattleState : BattleState
     [SerializeField] float _durationMoveOut;
     [SerializeField] float _durationMoveIn;
 
+    [Header("VFX")]
+    [SerializeField] ParticleSystem collideVFX;
+
     PlayerTurnBattleState _playerTurnBattleState;
     public GameObject _playerMonster { get; private set; }
     EnemyTurnBattleState _enemyTurnBattleState;
@@ -103,6 +106,9 @@ public class FightBattleState : BattleState
             _enemyMonster.transform.DOMoveX(_battleCollidePos.position.x, _durationMoveIn);
 
             yield return new WaitForSeconds(_durationMoveIn);
+
+            collideVFX.Play();
+            soundEffects.PlayCollideSound();
 
             // move back to battle ready pos
             _playerMonster.transform.DOMoveX(_playerBattlePos.position.x, _durationMoveIn);

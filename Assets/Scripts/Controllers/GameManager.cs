@@ -54,7 +54,6 @@ public class GameManager : MonoBehaviour
         if (_currentLevel == _levelsUnlocked)
         {
             _levelsUnlocked++;
-            print(_levelsUnlocked);
         }
     }
 
