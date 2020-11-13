@@ -33,7 +33,8 @@ public class DamagePopup : MonoBehaviour
     public void SetupMessage(string message, float duration)
     {
         _textMesh = GetComponentInChildren<TextMeshProUGUI>();
-        _textMesh.color = Color.green;
+        _textMesh.color = Color.red;
+        _textMesh.fontSize = 75;
         _textMesh.text = message;
     }
 }

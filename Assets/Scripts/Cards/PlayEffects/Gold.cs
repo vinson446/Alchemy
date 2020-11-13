@@ -12,6 +12,6 @@ public class Gold : CardPlayEffect
     {
         _gameManager = FindObjectOfType<GameManager>();
 
-        _gameManager.IncrementGold(100);
+        _gameManager.IncrementGold(1000);
     }
 }

@@ -74,6 +74,16 @@ public class SoundEffects : MonoBehaviour
     [SerializeField] float collidePitch;
     [SerializeField] float collideVolume;
 
+    [Header("Fuse Sound")]
+    [SerializeField] AudioClip fuseSFX;
+    [SerializeField] float fusePitch;
+    [SerializeField] float fuseVolume;
+
+    [Header("Fuse Effect Sound")]
+    [SerializeField] AudioClip fuseEffectSFX;
+    [SerializeField] float fuseEffectPitch;
+    [SerializeField] float fuseEffectVolume;
+
     AudioSource audioSource;
 
     // Start is called before the first frame update
@@ -155,6 +165,20 @@ public class SoundEffects : MonoBehaviour
         audioSource.pitch = enemyTurnPitch;
         audioSource.volume = enemyTurnVolume;
         audioSource.PlayOneShot(enemyTurnSFX);
+    }
+
+    public void PlayFuseSound()
+    {
+        audioSource.pitch =fusePitch;
+        audioSource.volume = fuseVolume;
+        audioSource.PlayOneShot(fuseSFX);
+    }
+
+    public void PlayFuseEffectSound()
+    {
+        audioSource.pitch = fuseEffectPitch;
+        audioSource.volume = fuseEffectVolume;
+        audioSource.PlayOneShot(fuseEffectSFX);
     }
 
     public void PlayCollideSound()

@@ -16,7 +16,7 @@ MonoBehaviour:
   _level: 1
   _attack: 0
   _defense: 0
-  _description: 'Fusion Card: +100 Gold'
+  _description: 'Fusion Card: +1000 Gold'
   _monsterSprite: {fileID: 21300000, guid: d3e4717dffb75b344acba4152b594657, type: 3}
   _monsterColor: {r: 1, g: 0.7844803, b: 0.0990566, a: 1}
   _spriteBackground: {fileID: 21300000, guid: 69f7d3ee602ba9c4e919ccd72739b575, type: 3}

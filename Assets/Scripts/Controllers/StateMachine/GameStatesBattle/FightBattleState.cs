@@ -28,6 +28,8 @@ public class FightBattleState : BattleState
 
     [Header("VFX")]
     [SerializeField] ParticleSystem collideVFX;
+    [SerializeField] ParticleSystem collideVFX2;
+    [SerializeField] ParticleSystem effectVFX;
 
     PlayerTurnBattleState _playerTurnBattleState;
     public GameObject _playerMonster { get; private set; }
@@ -91,6 +93,10 @@ public class FightBattleState : BattleState
         {
             // activate player play effect
             continueBattle = ActivatePlayerPlayEffect();
+
+            effectVFX.Play();
+            soundEffects.PlayFuseEffectSound();
+
             yield return new WaitForSeconds(1f);
         }
         if (continueBattle)
@@ -108,6 +114,7 @@ public class FightBattleState : BattleState
             yield return new WaitForSeconds(_durationMoveIn);
 
             collideVFX.Play();
+            // collideVFX2.Play();
             soundEffects.PlayCollideSound();
 
             // move back to battle ready pos

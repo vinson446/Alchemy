@@ -36,6 +36,7 @@ public class PlayerTurnBattleState : BattleState
 
     [Header("Visual Settings")]
     [SerializeField] TextMeshProUGUI _playerTurnText;
+    [SerializeField] ParticleSystem fuseVFX;
 
     bool _selectingFirstCard = true;
     bool _selectingSecondCard = false;
@@ -508,6 +509,9 @@ public class PlayerTurnBattleState : BattleState
         fusionSequence2.Play();
 
         yield return new WaitForSeconds(_durationMoveOut + _durationMoveIn);
+
+        fuseVFX.Play();
+        soundEffects.PlayFuseSound();
 
         FadeFusionCardForFusionCombination(false);
 

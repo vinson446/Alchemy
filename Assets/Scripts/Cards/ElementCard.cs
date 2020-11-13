@@ -66,10 +66,10 @@ public class ElementCard : Card
 
     public void RevertUpgrade()
     {
-        Attack /= 2;
-        Defense /= 2;
-
         Level--;
+
+        Attack -= Level * 500;
+        Defense -= Level * 500;
 
         if (Level >= 6)
         {

@@ -28,6 +28,9 @@ public class ShowUpgradeState : LevelSelectState
     [SerializeField] TextMeshProUGUI _goldText;
     int _gold;
 
+    [SerializeField] GameObject noMoneyPopup;
+    [SerializeField] Transform noMoneyPos;
+
     ShowDeckState _showDeckState;
     GameManager _gameManager;
 
@@ -116,6 +119,10 @@ public class ShowUpgradeState : LevelSelectState
         {
             // TODO- add fail message
             soundEffects.PlayNoMoneySound();
+
+            GameObject noMoneyText = Instantiate(noMoneyPopup, noMoneyPos.position, Quaternion.identity);
+            noMoneyText.transform.SetParent(_deckPanel.transform);
+            noMoneyText.GetComponent<DamagePopup>().SetupMessage("Not enough gold", 3);
 
             OnPressedDeck();
         }

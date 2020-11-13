@@ -292,8 +292,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278244351
+  m_fontColor: {r: 1, g: 0.8291087, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5207,6 +5207,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 417819682}
   m_CullTransparentMesh: 0
+--- !u!1 &425049998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 425049999}
+  m_Layer: 5
+  m_Name: No Money Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &425049999
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425049998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1397557232}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 196.4}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &426973349
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5691,6 +5726,9 @@ MonoBehaviour:
   _levelText: {fileID: 1180658584}
   _costText: {fileID: 1503070278}
   _goldText: {fileID: 1507985128}
+  noMoneyPopup: {fileID: 594693483936537094, guid: a88dba16ccf9ae940afb009af065d89d,
+    type: 3}
+  noMoneyPos: {fileID: 425049999}
 --- !u!1 &443636033 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1891397486538759974, guid: 79910dfd04af4a94588ebb5b242b71c1,
@@ -6609,7 +6647,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Deck
+  m_text: Upgrades
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 842ad10f3ddb3b54892791463f699431, type: 2}
   m_sharedMaterial: {fileID: 2910072651365777685, guid: 842ad10f3ddb3b54892791463f699431,
@@ -6679,7 +6717,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 544200738}
-    characterCount: 4
+    characterCount: 8
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -9537,6 +9575,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _currentLevel
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8062423523307209538, guid: 33bd2b9f5b3ccf84c8e8881f0e5adc19,
+        type: 3}
+      propertyPath: _gold
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 8062423523307209539, guid: 33bd2b9f5b3ccf84c8e8881f0e5adc19,
         type: 3}
@@ -13674,6 +13717,7 @@ RectTransform:
   - {fileID: 663636011}
   - {fileID: 499647555}
   - {fileID: 2098417504}
+  - {fileID: 425049999}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -14520,8 +14564,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278244351
+  m_fontColor: {r: 1, g: 0.8291087, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
