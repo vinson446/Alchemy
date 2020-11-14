@@ -81,8 +81,8 @@ public class ElementCardView : MonoBehaviour
     {
         enemyCard = true;
 
-        _attackBoost = (GameManager._instance.CurrentLevel) * 1000;
-        _defenseBoost = (GameManager._instance.CurrentLevel) * 1000;
+        _attackBoost = (GameManager._instance.CurrentLevel) * 500;
+        _defenseBoost = (GameManager._instance.CurrentLevel) * 500;
 
         _levelBoost = (GameManager._instance.CurrentLevel);
 

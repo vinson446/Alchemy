@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Mummy
   _level: 1
-  _attack: 900
-  _defense: 400
+  _attack: 1100
+  _defense: 600
   _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: 15d6a7f0cd60cd94a8f055949ee1f242, type: 3}
   _monsterColor: {r: 1, g: 1, b: 1, a: 1}

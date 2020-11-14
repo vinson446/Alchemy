@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Mimic
   _level: 1
-  _attack: 700
-  _defense: 700
+  _attack: 900
+  _defense: 900
   _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: 11c6727d8cb21d8438977c301a0359d1, type: 3}
   _monsterColor: {r: 0.9528302, g: 0.8017818, b: 0, a: 1}

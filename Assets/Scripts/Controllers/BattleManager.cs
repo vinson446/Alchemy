@@ -135,7 +135,7 @@ public class BattleManager : MonoBehaviour
             winLosePanel.SetActive(true);
             winLoseText.text = "Victory!";
 
-            goldReward = GameManager._instance.CurrentLevel * 500 + 500;
+            goldReward = GameManager._instance.CurrentLevel * 400 + 100;
             goldImage.SetActive(true);
             rewardText.text = "+" + goldReward.ToString() + " Gold";
 

@@ -22,7 +22,7 @@ public class Devil : CardPlayEffect
         ElementCardView cardView = _fightBattleState._playerMonster.GetComponent<ElementCardView>();
         int atkBoost = cardView.Attack + pDamage;
 
-        cardView.StatChange(atkBoost, 0, cardView.Level);
+        cardView.StatChange(atkBoost, cardView.Defense, cardView.Level);
 
         bool continueGame = _battleManager.UpdateBothHP(-pDamage, 0);
         _fightBattleState.ShowDamagePopup(-pDamage, 0);

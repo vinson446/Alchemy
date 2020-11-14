@@ -5717,7 +5717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bd612f64ef5b7b42856993dba73a343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _upgradeMultiplier: 100
+  _upgradeMultiplier: 300
   _deckPanel: {fileID: 499647554}
   _upgradePanel: {fileID: 2098417503}
   _cardInDeckIndex: 0
@@ -9485,7 +9485,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &774639091
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14394,7 +14394,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 41.5, y: 282}
+  m_AnchoredPosition: {x: -6, y: 282}
   m_SizeDelta: {x: 464.48486, y: 177.8877}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1503070278

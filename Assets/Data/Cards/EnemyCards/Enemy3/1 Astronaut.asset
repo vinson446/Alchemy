@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Astronaut
   _level: 1
-  _attack: 800
-  _defense: 800
+  _attack: 1100
+  _defense: 1100
   _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: 2ebc2f48544650a45b1332b3f9cbdea2, type: 3}
   _monsterColor: {r: 1, g: 1, b: 1, a: 1}

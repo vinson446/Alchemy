@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Satellite
   _level: 1
-  _attack: 400
-  _defense: 1250
+  _attack: 700
+  _defense: 1550
   _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: 3fdea608d1b350546ac7168074c9fc67, type: 3}
   _monsterColor: {r: 0, g: 0.8381572, b: 1, a: 1}

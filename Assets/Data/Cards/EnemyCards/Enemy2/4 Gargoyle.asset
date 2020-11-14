@@ -15,7 +15,7 @@ MonoBehaviour:
   _name: Gargoyle
   _level: 2
   _attack: 1400
-  _defense: 1100
+  _defense: 1700
   _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: 34579a40c78ef6049943dcf2e92761d5, type: 3}
   _monsterColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 1}

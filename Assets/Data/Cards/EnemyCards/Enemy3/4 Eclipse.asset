@@ -15,7 +15,7 @@ MonoBehaviour:
   _name: Eclipse
   _level: 2
   _attack: 4000
-  _defense: 0
+  _defense: 1000
   _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: 2e19d57b1069ae7439f1077ea3522f5f, type: 3}
   _monsterColor: {r: 1, g: 1, b: 1, a: 1}

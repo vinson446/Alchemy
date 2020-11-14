@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Slime
   _level: 1
-  _attack: 500
-  _defense: 500
+  _attack: 700
+  _defense: 700
   _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: 00e1adfb091d30d4da6bcb0a8986c96b, type: 3}
   _monsterColor: {r: 0.11764705, g: 1, b: 0.1795133, a: 1}

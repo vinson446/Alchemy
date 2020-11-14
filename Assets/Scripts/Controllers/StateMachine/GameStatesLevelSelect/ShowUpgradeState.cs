@@ -90,8 +90,9 @@ public class ShowUpgradeState : LevelSelectState
     
     void ShowGoldStuff()
     {
-        _cost = int.Parse(_levelText.text) * _upgradeMultiplier;
-        _costText.text = "Cost: " + _cost.ToString(); ;
+        print(int.Parse(_levelText.text));
+        _cost = 50 * (int)(Mathf.Pow(2, int.Parse(_levelText.text)));
+        _costText.text = "Cost: " + _cost.ToString();
 
         _gold = _gameManager.Gold;
         _goldText.text = _gold.ToString();

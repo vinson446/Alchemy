@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Gnome
   _level: 1
-  _attack: 550
-  _defense: 450
+  _attack: 750
+  _defense: 650
   _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: a77aed172ea7ed547adbfa5a91831e2b, type: 3}
   _monsterColor: {r: 0.9339623, g: 0.54322296, b: 0, a: 1}

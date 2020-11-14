@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Alien
   _level: 1
-  _attack: 1300
-  _defense: 700
+  _attack: 1700
+  _defense: 1100
   _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: 20a8909abcf0f3940b9a5fb06f726824, type: 3}
   _monsterColor: {r: 0.2783019, g: 1, b: 0.3080967, a: 1}

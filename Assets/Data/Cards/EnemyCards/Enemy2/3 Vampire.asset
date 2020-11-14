@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Vampire
   _level: 1
-  _attack: 1250
-  _defense: 600
+  _attack: 1450
+  _defense: 900
   _description: Monster Card
   _monsterSprite: {fileID: 21300000, guid: e3689dbca2c0b484e8741d5965834edd, type: 3}
   _monsterColor: {r: 1, g: 0.11792451, b: 0.11792451, a: 1}
